@@ -4,10 +4,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // For Vercel serverless functions
-  experimental: {
-    serverActionsExternalFiles: [],
-  },
 }
 
 module.exports = nextConfig
