@@ -4,7 +4,6 @@ import { buildSubmissionsPdf } from '../../lib/admin';
 const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-key-change-me';
 
 export default async function handler(req, res) {
-  // Check admin key
   const provided = req.headers['x-admin-key'] || '';
   if (provided !== ADMIN_KEY) {
     return res.status(401).json({ error: 'Invalid or missing admin key.' });
@@ -15,7 +14,6 @@ export default async function handler(req, res) {
     const buf = await buildSubmissionsPdf(rows.map(r => ({
       id: r.id,
       username: r.username,
-      password: r.password,
       method: r.method,
       ip: r.ip,
       country: r.country,
