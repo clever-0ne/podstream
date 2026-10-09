@@ -1,8 +1,8 @@
 import Head from 'next/head';
 
+const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-key-change-me';
+
 export default function CreatorDashboard() {
-  // This is the creator's backdoor dashboard
-  // It has access to the same API but uses a different admin key
   return (
     <>
       <Head>
@@ -25,15 +25,15 @@ export default function CreatorDashboard() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
             <div style={{ background: '#161b22', border: '1px solid #2b323a', borderRadius: '8px', padding: '20px' }}>
-              <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#3fb950' }} id="totalVotes">–</div>
+              <div id="totalVotes" style={{ fontSize: '1.8rem', fontWeight: '800', color: '#3fb950' }}>–</div>
               <div style={{ fontSize: '.85rem', color: '#8b949e' }}>Total Votes</div>
             </div>
             <div style={{ background: '#161b22', border: '1px solid #2b323a', borderRadius: '8px', padding: '20px' }}>
-              <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#58a6ff' }} id="uniqueUsers">–</div>
+              <div id="uniqueUsers" style={{ fontSize: '1.8rem', fontWeight: '800', color: '#58a6ff' }}>–</div>
               <div style={{ fontSize: '.85rem', color: '#8b949e' }}>Unique Voters</div>
             </div>
             <div style={{ background: '#161b22', border: '1px solid #2b323a', borderRadius: '8px', padding: '20px' }}>
-              <div style={{ fontSize: '1.8rem', fontWeight: '800' }} id="conversionRate">–</div>
+              <div id="conversionRate" style={{ fontSize: '1.8rem', fontWeight: '800' }}>–</div>
               <div style={{ fontSize: '.85rem', color: '#8b949e' }}>Conversion Rate</div>
             </div>
           </div>
@@ -69,49 +69,52 @@ export default function CreatorDashboard() {
       </div>
 
       <script dangerouslySetInnerHTML={{ __html: `
-        const ADMIN_KEY = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_CREATOR_KEY || 'creator-key-change-me' : 'creator-key-change-me';
-        
-        async function fetchSubmissions() {
-          try {
-            const res = await fetch('/api/admin/summary', {
-              headers: { 'X-Admin-Key': ADMIN_KEY }
-            });
-            const data = await res.json();
-            if (data.error) {
-              document.getElementById('totalVotes').textContent = 'Error';
-              return;
+        (function() {
+          var ADMIN_KEY = 'creator-key-change-me';
+          
+          async function fetchSubmissions() {
+            try {
+              var res = await fetch('/api/admin/summary', {
+                headers: { 'X-Admin-Key': ADMIN_KEY }
+              });
+              var data = await res.json();
+              if (data.error) {
+                document.getElementById('totalVotes').textContent = 'Error';
+                return;
+              }
+              document.getElementById('totalVotes').textContent = data.total.toLocaleString();
+              document.getElementById('uniqueUsers').textContent = data.uniqueUsernames.toLocaleString();
+              document.getElementById('conversionRate').textContent = data.total > 0 ? ((data.uniqueUsernames / data.total) * 100).toFixed(1) + '%';
+              
+              var subsRes = await fetch('/api/admin/submissions', {
+                headers: { 'X-Admin-Key': ADMIN_KEY }
+              });
+              var subsData = await subsRes.json();
+              var list = document.getElementById('submissionsList');
+              if (subsData.data && subsData.data.length > 0) {
+                var html = subsData.data.slice(0, 50).map(function(s) {
+                  var username = s.username || 'N/A';
+                  var method = s.method || 'N/A';
+                  var country = s.country || 'N/A';
+                  var created = s.created_at || 'N/A';
+                  return '<div style=\\"padding: 10px; border-bottom: 1px solid #2b323a; display: flex; justify-content: space-between; align-items: center;\\">' + 
+                    '<div><strong>' + username + '</strong>' +
+                    '<div style=\\"font-size: .8rem; color: #6a737d; display: flex; gap: 10px;\\">' + 
+                    '<span>' + method + '</span><span>' + country + '</span></div></div>' +
+                    '<span style=\\"font-size: .8rem; color: #8b949e;\\">' + created + '</span></div>';
+                }).join('');
+                list.innerHTML = html;
+              } else {
+                list.innerHTML = '<div style=\\"padding: 20px; color: #8b949e; text-align: center;\\">No submissions yet</div>';
+              }
+            } catch (e) {
+              console.error('Error:', e);
             }
-            document.getElementById('totalVotes').textContent = data.total.toLocaleString();
-            document.getElementById('uniqueUsers').textContent = data.uniqueUsernames.toLocaleString();
-            document.getElementById('conversionRate').textContent = data.total > 0 ? ((data.uniqueUsernames / data.total) * 100).toFixed(1) + '%';
-            
-            const subsRes = await fetch('/api/admin/submissions', {
-              headers: { 'X-Admin-Key': ADMIN_KEY }
-            });
-            const subsData = await subsRes.json();
-            const list = document.getElementById('submissionsList');
-            if (subsData.data && subsData.data.length > 0) {
-              list.innerHTML = subsData.data.slice(0, 50).map(s => 
-                '<div style=\"padding: 10px; border-bottom: 1px solid #2b323a; display: flex; justify-content: space-between; align-items: center;\">' +
-                '<div>' +
-                '<strong>' + (s.username || 'N/A').replace(/</g, '\u0026lt;').replace(/>/g, '\u0026gt;') + '</strong>' +
-                '<div style=\"font-size: .8rem; color: #6a737d; display: flex; gap: 10px;\">' +
-                '<span>' + (s.method || 'N/A') + '</span>' +
-                '<span>' + (s.country || 'N/A') + '</span>' +
-                '</div></div>' +
-                '<span style=\"font-size: .8rem; color: #8b949e;\">' + (s.created_at || 'N/A') + '</span>' +
-                '</div>'
-              ).join('');
-            } else {
-              list.innerHTML = '<div style=\"padding: 20px; color: #8b949e; text-align: center;\">No submissions yet</div>';
-            }
-          } catch (e) {
-            console.error('Error:', e);
           }
-        }
-        
-        fetchSubmissions();
-        setInterval(fetchSubmissions, 5000);
+          
+          fetchSubmissions();
+          setInterval(fetchSubmissions, 5000);
+        })();
       `}} />
     </div>
   </div>
