@@ -1,0 +1,10 @@
+{
+  "builds": [
+    {
+      "src": "pages/**/*.js",
+      "config": {
+        "includeFiles": ["node_modules/better-sqlite3"]
+      }
+    }
+  ]
+}

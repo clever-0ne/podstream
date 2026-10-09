@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": ".next",
+  "env": {
+    "ADMIN_KEY": "@admin_key",
+    "DB_FILE": "/tmp/honeypot.sqlite"
+  }
+}
