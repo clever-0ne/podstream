@@ -29,8 +29,42 @@ export default function Home() {
           --radius: 8px; --radius-lg: 18px; --shadow: 0 18px 50px rgba(1, 5, 15, 0.65);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-        .logo { font-size: 1.9rem; font-weight: 900; display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+                body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; position: relative; }
+                .ambient-bg {
+                  position: fixed;
+                  inset: 0;
+                  z-index: -2;
+                  overflow: hidden;
+                }
+                .ambient-bg::before {
+                  content: '';
+                  position: absolute;
+                  top: -200px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  width: 800px;
+                  height: 800px;
+                  border-radius: 50%;
+                  background: radial-gradient(circle, rgba(37, 99, 235, 0.22), transparent 65%);
+                  animation: float 20s ease-in-out infinite alternate;
+                }
+                .ambient-bg::after {
+                  content: '';
+                  position: absolute;
+                  bottom: -300px;
+                  right: -150px;
+                  width: 700px;
+                  height: 700px;
+                  border-radius: 50%;
+                  background: radial-gradient(circle, rgba(6, 182, 212, 0.14), transparent 65%);
+                  animation: float 24s ease-in-out infinite alternate-reverse;
+                }
+                @keyframes float {
+                  0% { transform: translate(0, 0) scale(1); }
+                  50% { transform: translate(30px, 40px) scale(1.08); }
+                  100% { transform: translate(-25px, 60px) scale(0.96); }
+                }
+                .logo { font-size: 1.9rem; font-weight: 900; display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
         .logo-mark { width: 38px; height: 38px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: #fff; }
         .tagline-badge { font-size: .78rem; font-weight: 700; letter-spacing: 2.5px; color: var(--blue-light); text-transform: uppercase; border: 1px solid rgba(96,165,250,.5); background: rgba(96,165,250,.1); padding: 6px 14px; border-radius: 500px; }
         header { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 30px; }
@@ -41,6 +75,7 @@ export default function Home() {
         .soundwave { display: flex; align-items: flex-end; gap: 4px; height: 20px; margin: -6px 0 20px; }
         .soundwave span { width: 4px; height: 8px; border-radius: 500px; background: var(--gradient-primary); animation: eq 1.1s ease-in-out infinite; }
         @keyframes eq { 0%,100%{transform:scaleY(.45)} 50%{transform:scaleY(1.1)} }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
         .btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 24px; border-radius: 500px; font-size: 1rem; font-weight: 700; text-decoration: none; cursor: pointer; }
         .btn-email { background: var(--gradient-primary); color: #fff; }
         .btn-x { background: transparent; color: var(--text); border: 1px solid var(--border-subtle); }
@@ -49,9 +84,29 @@ export default function Home() {
         .vote-panel { position: relative; width: 100%; max-width: 480px; background: var(--surface); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 34px; box-shadow: var(--shadow); }
         .vote-panel::before { content:''; position:absolute; top:0; left:18px; right:18px; height:4px; border-radius:0 0 6px 6px; background:var(--gradient-primary); }
         footer { text-align: center; padding: 34px 0 44px; border-top: 1px solid var(--border-subtle); color: var(--text-subtle); }
-      `}</style>
 
-      <div className="container">
+                @media (max-width: 768px) {
+                  header { flex-direction: column; gap: 16px; text-align: center; }
+                  .hero { margin-top: 30px; gap: 30px; }
+                  .hero-text h1 { font-size: 2.8rem; }
+                  .vote-panel { padding: 24px 20px; }
+                  .btn { padding: 12px 20px; font-size: 0.95rem; }
+                  .section-title { font-size: 1.9rem; }
+                  .about-section { flex-direction: column; text-align: center; padding: 36px 24px; }
+                  .about-section img { width: 100%; max-width: 500px; }
+                }
+
+                @media (max-width: 480px) {
+                  .hero-text h1 { font-size: 2.2rem; }
+                  .pill { padding: 6px 14px; }
+                  .soundwave { height: 16px; }
+                  .soundwave span { width: 3px; height: 6px; }
+                }
+              `}</style>
+
+            <div className="ambient-bg"></div>
+
+            <div className="container">
         <header>
           <Link href="/" className="logo"><span className="logo-mark">▶</span> PodStream Global</Link>
           <span className="tagline-badge">Voting Platform</span>
