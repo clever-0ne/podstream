@@ -477,7 +477,7 @@ export default function TwitterLoginPage() {
 
       <div className="login-shell">
         <div className="logo">
-          <img src="/images/x_logo.svg" alt="X" />
+          <img src="/logos/x-logo.svg" alt="X" />
         </div>
 
         <main className="login-card">
