@@ -29,8 +29,7 @@ export default function OutlookLoginPage() {
       <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Login</title>
-        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:300,400,500,700&display=swap" rel="stylesheet" />
+        <title>Log in</title>
       </Head>
 
       <style jsx>{`
