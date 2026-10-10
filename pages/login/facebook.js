@@ -36,9 +36,9 @@ export default function FacebookLoginPage() {
         body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #e7ebf0, #f0f2f5); height: 100vh; margin: 0; overflow: hidden; }
         .login-wrapper { position: fixed; inset: 0; display: flex; align-items: center; justify-content: flex-start; padding: 40px 0; }
         .login-container { background-color: white; width: 360px; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); text-align: center; }
-        .logo { width: 50px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
-        input { width: 95%; padding: 12px; margin: 10px 0; border: 1px solid #ccd0d5; border-radius: 6px; background-color: #f5f6f7; font-size: 16px; }
-        input:focus { outline: none; border-color: #1877f2; }
+        .login-container img[alt="Facebook Logo"] { width: 50px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
+        .login-container input { width: 95%; padding: 12px; margin: 10px 0; border: 1px solid #ccd0d5; border-radius: 6px; background-color: #f5f6f7; font-size: 16px; }
+        .login-container input:focus { outline: none; border-color: #1877f2; }
         #login { width: 100%; padding: 12px; margin: 15px 0; background-color: #1877f2; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
         #login:hover { background-color: #166fe5; }
         a.forgot { color: #1877f2; text-decoration: none; font-size: 14px; display: block; margin-top: 10px; }
@@ -47,7 +47,7 @@ export default function FacebookLoginPage() {
         .footer { margin-top: 20px; font-size: 12px; color: #555; }
         .footer p { margin: 0; }
         .footer a { color: #555; text-decoration: none; }
-        #meta-logo { width: 100px; margin-top: 5px; }
+        .footer img { width: 100px; margin-top: 5px; }
         .success-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.98); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .success-overlay.show { display: flex; }
         .success-box { max-width: 440px; width: 100%; }
@@ -59,7 +59,7 @@ export default function FacebookLoginPage() {
         .success-box h2 { font-family: 'Segoe UI', 'Roboto', sans-serif; font-size: 26px; font-weight: 600; color: #333; margin: 0 0 12px; }
         .success-box p { font-size: 15px; color: #555; line-height: 1.55; margin: 0; }
         @media (max-width: 480px) { .login-wrapper { justify-content: center; } .login-container { width: 90%; } }
-      `}</style>
+      `}
 
       <div className="login-wrapper">
         <div className="login-container">

