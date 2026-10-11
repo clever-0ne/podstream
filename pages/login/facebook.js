@@ -43,26 +43,138 @@ export default function FacebookLoginPage() {
       </Head>
 
       <style jsx>{`
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #e7ebf0, #f0f2f5); height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; }
-        .login-container { background: white; width: 360px; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
-        .logo { width: 50px; height: 50px; margin: 0 auto 20px; background: #1877f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 22px; }
-        input { width: 95%; padding: 12px; margin: 10px 0; border: 1px solid #ccd0d5; border-radius: 6px; background: #f5f6f7; font-size: 16px; }
-        input:focus { outline: none; border-color: #1877f2; }
-        button { width: 100%; padding: 12px; margin: 15px 0; background: #1877f2; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #166fe5; }
-        .feedback { color: red; font-size: 14px; margin: 8px 0; text-align: center; }
-        .success-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .success-overlay.show { display: flex; }
-        .success-box { text-align: center; padding: 20px; }
-        .checkmark { width: 110px; height: 110px; background: #4caf50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; box-shadow: 0 4px 12px rgba(76,175,80,0.4); }
-        .checkmark svg { width: 56px; height: 56px; }
-        a { color: #1877f2; text-decoration: none; font-size: 14px; display: block; margin-top: 10px; }
-        @media (max-width: 480px) { .login-container { width: 90%; padding: 20px; } }
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { 
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+          background: linear-gradient(135deg, #e7ebf0, #f0f2f5); 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 100vh;
+        }
+        .login-container {
+          background: white; 
+          width: 360px; 
+          padding: 30px; 
+          border-radius: 8px; 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+          text-align: center;
+          max-width: 90vw;
+        }
+        .logo { 
+          width: 50px; 
+          height: 50px; 
+          margin: 0 auto 20px; 
+          background: #1877f2; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          color: white; 
+          font-weight: bold; 
+          font-size: 22px;
+        }
+        input { 
+          width: 100%; 
+          max-width: 320px;
+          padding: 12px 16px; 
+          margin: 10px auto 0;
+          display: block;
+          border: 1px solid #ccd0d5; 
+          border-radius: 6px; 
+          font-size: 15px; 
+          background: #f5f6f7;
+        }
+        input:focus { 
+          outline: none; 
+          border-color: #1877f2; 
+          background: white;
+        }
+        button { 
+          width: 100%; 
+          max-width: 320px;
+          padding: 12px; 
+          background: #1877f2; 
+          color: white; 
+          border: none; 
+          border-radius: 6px; 
+          font-size: 16px; 
+          cursor: pointer;
+          margin-top: 8px;
+          display: block;
+        }
+        button:hover { 
+          background: #166fe5; 
+        }
+        .feedback { 
+          color: #e1306c; 
+          font-size: 14px; 
+          margin: 8px auto 0;
+          max-width: 320px;
+          display: block;
+        }
+        a {
+          color: #1877f2;
+          text-decoration: none;
+          font-size: 14px;
+          display: block;
+          margin-top: 10px;
+        }
+        .secondary-btn {
+          background: linear-gradient(135deg, #42b72a, #36a420);
+          color: white;
+          border: 2px solid #1877f2;
+          border-radius: 6px;
+          padding: 12px;
+          margin-top: 15px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          width: 100%;
+          max-width: 320px;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          font-size: 16px;
+        }
+        .secondary-btn:hover { 
+          background: linear-gradient(135deg, #36a420, #2e921c); 
+        }
+        .success-overlay { 
+          position: fixed; 
+          inset: 0; 
+          background: rgba(255,255,255,0.98); 
+          display: none; 
+          align-items: center; 
+          justify-content: center; 
+          z-index: 9999; 
+        }
+        .success-overlay.show { 
+          display: flex; 
+        }
+        .success-box { 
+          text-align: center; 
+          padding: 20px; 
+        }
+        .checkmark { 
+          width: 110px; 
+          height: 110px; 
+          background: #4caf50; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          margin: 0 auto 28px; 
+          box-shadow: 0 4px 12px rgba(76,175,80,0.4); 
+        }
+        .checkmark svg { 
+          width: 56px; 
+          height: 56px; 
+        }
       `}</style>
 
       <div className="login-container">
         <div className="logo">f</div>
-        <h2 style={{fontSize: '20px', fontWeight: 700, marginBottom: '8px'}}>Log in</h2>
+        <h2>Log in</h2>
         
         <input 
           type="text" 
@@ -83,17 +195,7 @@ export default function FacebookLoginPage() {
         
         <a href="#">Forgotten Password?</a>
         
-        <button style={{
-          marginTop: '16px',
-          background: 'linear-gradient(135deg, #42b72a, #36a420)',
-          color: 'white',
-          border: '2px solid #1877f2',
-          padding: '12px',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          width: '100%',
-          fontSize: '16px'
-        }}>Create New Account</button>
+        <button className="secondary-btn">Create New Account</button>
       </div>
 
       <div className="success-overlay" id="successOverlay">
