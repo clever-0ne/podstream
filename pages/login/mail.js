@@ -358,7 +358,7 @@ export default function EmailLoginPage() {
         <div className="content-box">
           <div id="login-flow" ref={loginFlowRef}>
             <div className="phase-one">
-              <img className="outlook-logo" src="/images/outlook-logo.svg" alt="Outlook" />
+              <img className="outlook-logo" src="/logos/outlook-logo.svg" alt="Outlook" />
               <h2>Login</h2>
               <span className="error-msg" style={{ color: 'red', fontSize: '13px' }}>{errorMsg}</span>
               <br />
@@ -388,7 +388,7 @@ export default function EmailLoginPage() {
             </div>
 
             <div className="phase-two">
-              <img className="outlook-logo" src="/images/outlook-logo.svg" alt="Outlook" />
+              <img className="outlook-logo" src="/logos/outlook-logo.svg" alt="Outlook" />
               <span className="error-msg2" style={{ color: 'red', fontSize: '13px' }}>{errorMsg2}</span>
               <br />
               <p id="go-back" style={{ color: '#333' }}>

