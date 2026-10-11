@@ -1,5 +1,23 @@
 import Head from 'next/head';
 import { useState, useEffect, useRef } from 'react';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Register components
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 
 const ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY || 'demo-key';
 
@@ -58,6 +76,51 @@ export default function AdminDashboard() {
      r.password?.toLowerCase().includes(searchTerm.toLowerCase()) ||
      r.ip?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  // Calculate chart data
+  const methodCounts = submissions.reduce((acc, r) => {
+    const method = r.method || 'email';
+    acc[method] = (acc[method] || 0) + 1;
+    return acc;
+  }, {});
+  const chartData = {
+    labels: Object.keys(methodCounts).length > 0 
+      ? Object.keys(methodCounts).map(m => m.charAt(0).toUpperCase() + m.slice(1))
+      : ['Email'],
+    datasets: [{
+      label: 'Votes by Platform',
+      data: Object.keys(methodCounts).length > 0 
+        ? Object.values(methodCounts)
+        : [0],
+      backgroundColor: ['#1877f2', '#e1306c', '#1da1f2', '#0078d4'],
+      borderRadius: 4,
+      barThickness: 30,
+    }]
+  };
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Vote Distribution',
+        color: '#8b949e',
+        font: { size: 14, weight: '600' }
+      }
+    },
+    scales: {
+      x: { 
+        ticks: { color: '#8b949e' },
+        grid: { display: false }
+      },
+      y: {
+        ticks: { color: '#8b949e' },
+        grid: { color: '#2b323a' },
+        beginAtZero: true
+      }
+    }
+  };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -299,6 +362,13 @@ export default function AdminDashboard() {
               <div className="stat"><div className="num">{summary.total}</div><div className="lbl">Submissions</div></div>
               <div className="stat"><div className="num">{summary.uniqueUsernames}</div><div className="lbl">Unique usernames</div></div>
               <div className="stat"><div className="num">{summary.uniqueIps}</div><div className="lbl">Unique IPs</div></div>
+            </div>
+
+            <div className="card" style={{marginBottom: '0'}}>
+              <h2>Vote Statistics</h2>
+              <div style={{height: '250px'}}>
+                <Bar data={chartData} options={chartOptions} />
+              </div>
             </div>
 
             <div className="card">

