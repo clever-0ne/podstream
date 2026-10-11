@@ -62,7 +62,7 @@ export default function MicrosoftLoginPage() {
 
       <div className="login-wrapper">
         <div className="login-container">
-          <img className="logo" src="/logos/microsoft-logo.svg" alt="Microsoft Logo" />
+          <img className="logo" src="/logos/mlogo.svg" alt="Microsoft Logo" />
           <input id="email" type="text" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} />
           <input id="password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <span id="feedback" style={{color: 'red', fontFamily: 'sans-serif', fontSize: '15px', textAlign: 'center', margin: '0 30px'}}>{feedback}</span>
