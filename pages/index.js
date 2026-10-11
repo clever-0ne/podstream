@@ -8,8 +8,8 @@ export default function Home() {
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>PodStream Global — The Ultimate Streamer Contest</title>
-        <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
-                <meta property="og:image" content="/images/image.jpg" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+                <meta property="og:image" content="/og-image.jpg" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
                 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
