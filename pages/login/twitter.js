@@ -80,7 +80,6 @@ export default function TwitterLoginPage() {
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0,0,0,0.1);
           text-align: center;
-          margin: 20px;
         }
         .logo { 
           width: 40px; 
@@ -90,6 +89,7 @@ export default function TwitterLoginPage() {
         }
         input { 
           width: 100%;
+          max-width: 320px;
           padding: 12px 14px; 
           margin: 10px 0;
           border: 1px solid #ccc; 
@@ -105,6 +105,7 @@ export default function TwitterLoginPage() {
         }
         button { 
           width: 100%;
+          max-width: 320px;
           padding: 12px;
           background: #1da1f2; 
           color: white; 

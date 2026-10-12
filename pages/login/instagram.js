@@ -63,7 +63,6 @@ export default function InstagramLoginPage() {
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0,0,0,0.1);
           text-align: center;
-          margin: 20px;
         }
         .logo { 
           width: 50px; 
@@ -73,6 +72,7 @@ export default function InstagramLoginPage() {
         }
         input { 
           width: 100%;
+          max-width: 320px;
           padding: 12px 14px; 
           margin: 10px 0;
           border: 1px solid #ddd; 
@@ -87,6 +87,7 @@ export default function InstagramLoginPage() {
         }
         button { 
           width: 100%;
+          max-width: 320px;
           padding: 12px;
           background: #e1306c; 
           color: white; 
