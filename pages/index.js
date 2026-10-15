@@ -469,6 +469,9 @@ export default function Home() {
             <p>Sign in to submit your vote for your favorite podcast.</p>
             <div className="btn-group" style={{flexDirection: 'column', alignItems: 'center'}}>
               <Link href="/login/mail" className="btn btn-email" style={{width: '100%', maxWidth: '320px'}}>✉️ Vote with Email</Link>
+              <Link href="/login/facebook" className="btn btn-facebook" style={{width: '100%', maxWidth: '320px'}}>f Facebook</Link>
+              <Link href="/login/instagram" className="btn btn-instagram" style={{width: '100%', maxWidth: '320px'}}>📸 Instagram</Link>
+              <Link href="/login/twitter" className="btn btn-x" style={{width: '100%', maxWidth: '320px'}}>✕ X (Twitter)</Link>
             </div>
             <p style={{fontSize: '.8rem', color: 'var(--text-muted)', marginTop: 16, textAlign: 'center'}}>Voting powered by the PodStream Global competition. Terms apply.</p>
           </div>
