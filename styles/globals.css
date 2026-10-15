@@ -10,4 +10,254 @@ body {
 html, body {
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
+}
+
+/* Login page centering */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Facebook login background */
+.login-page.facebook,
+.login-page.facebook body {
+  background: linear-gradient(135deg, #e7ebf0, #f0f2f5);
+}
+
+/* Instagram login background */
+.login-page.instagram {
+  background: #fafafa;
+}
+
+/* Twitter/X login background */
+.login-page.twitter {
+  background: #000;
+  color: #e7e9ea;
+}
+
+/* Email login background */
+.login-page.email {
+  background: linear-gradient(135deg, #e7ebf0, #f0f2f5);
+}
+
+/* Login container - centered */
+.login-container,
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  background: white;
+  margin: 0;
+}
+
+.login-container h2,
+.main-wrapper h2 {
+  margin: 0 0 18px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Logo */
+.logo {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+/* Instagram logo size */
+.instagram .logo {
+  width: 50px;
+  height: 50px;
+}
+
+/* Twitter logo size */
+.twitter .logo {
+  width: 40px;
+  height: 40px;
+}
+
+/* Inputs */
+.login-page input,
+.main-wrapper input {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 14px;
+  margin: 10px 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #fafafa;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-page input:focus {
+  outline: none;
+  background: white;
+}
+
+/* Facebook input focus */
+.facebook input:focus {
+  border-color: #1877f2;
+}
+
+/* Instagram input */
+.instagram input {
+  border: 1px solid #ddd;
+}
+
+.instagram input:focus {
+  border-color: #e1306c;
+}
+
+/* Twitter input */
+.twitter input {
+  border: 1px solid #ccc;
+  background: #fafafa;
+  color: #000;
+}
+
+.twitter input:focus {
+  border-color: #1d9bf0;
+}
+
+/* Email input focus */
+.email input:focus {
+  border-color: #0078d4;
+}
+
+/* Buttons */
+.login-page button,
+.main-wrapper button {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px;
+  background: #1877f2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-page button:hover {
+  background: #166fe5;
+}
+
+/* Instagram button */
+.instagram button {
+  background: #e1306c;
+}
+
+.instagram button:hover {
+  background: #c9305a;
+}
+
+/* Twitter button */
+.twitter button {
+  background: #1da1f2;
+}
+
+.twitter button:hover {
+  background: #1991d9;
+}
+
+/* Email button */
+.email button {
+  background: #0078d4;
+}
+
+.email button:hover {
+  background: #005a9e;
+}
+
+/* Secondary buttons */
+.secondary-btn {
+  background: linear-gradient(135deg, #42b72a, #36a420);
+  color: white;
+  border: 2px solid #1877f2;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 320px;
+  font-size: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.secondary-btn:hover {
+  background: linear-gradient(135deg, #36a420, #2e921c);
+}
+
+/* Feedback */
+.feedback {
+  color: #e1306c;
+  font-size: 14px;
+  margin: 8px auto 0;
+  max-width: 320px;
+  text-align: center;
+}
+
+/* Links */
+a {
+  color: #1877f2;
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  margin: 12px auto 0;
+  max-width: 320px;
+  text-align: center;
+}
+
+/* Twitter link */
+.twitter a {
+  color: #1da1f2;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .login-container,
+  .main-wrapper {
+    padding: 20px 16px;
+  }
+  
+  .logo {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .instagram .logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .twitter .logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .login-container h2,
+  .main-wrapper h2 {
+    font-size: 18px;
+  }
 }
