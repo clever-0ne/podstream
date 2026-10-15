@@ -45,89 +45,108 @@ export default function FacebookLoginPage() {
       </Head>
 
       <style jsx>{`
-        html, body { height: 100%; margin: 0; padding: 0; }
-        body { 
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-          background: linear-gradient(135deg, #e7ebf0, #f0f2f5); 
-          display: flex; 
-          justify-content: center; 
-          align-items: center; 
-          min-height: 100vh;
-          margin: 0;
-        }
-        .login-container {
-          background: white;
-          width: 100%;
-          max-width: 360px;
-          padding: 30px;
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-          text-align: center;
-        }
-        .logo {
-          width: 50px;
-          height: 50px;
-          margin: 0 auto 16px;
-          display: block;
-        }
-        input { 
-          width: 100%;
-          padding: 12px 14px; 
-          margin: 10px 0;
-          border: 1px solid #ccc; 
-          border-radius: 6px;
-          font-size: 15px;
-          background: #fafafa;
-        }
-        input:focus { 
-          outline: none;
-          border-color: #1877f2;
-          background: white;
-        }
-        button { 
-          width: 100%;
-          padding: 12px;
-          background: #1877f2;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 16px;
-          cursor: pointer;
-          margin-top: 8px;
-        }
-        button:hover { 
-          background: #166fe5;
-        }
-        .feedback {
-          color: #e1306c;
-          font-size: 14px;
-          margin: 8px 0;
-        }
-        a {
-          color: #1877f2;
-          text-decoration: none;
-          font-size: 14px;
-          display: block;
-          margin-top: 12px;
-        }
-        .secondary-btn {
-          background: linear-gradient(135deg, #42b72a, #36a420);
-          color: white;
-          border: 2px solid #1877f2;
-          border-radius: 6px;
-          padding: 12px;
-          margin-top: 15px;
-          margin-bottom: 10px;
-          cursor: pointer;
-          width: 100%;
-          font-size: 16px;
-        }
-        .secondary-btn:hover { 
-          background: linear-gradient(135deg, #36a420, #2e921c);
-        }
-      `}</style>
+              html { height: 100%; margin: 0; padding: 0; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+                background: linear-gradient(135deg, #e7ebf0, #f0f2f5); 
+              }
+              body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+              }
+              .login-container {
+                background: white;
+                width: 100%;
+                max-width: 360px;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                text-align: center;
+              }
+              .logo {
+                width: 50px;
+                height: 50px;
+                margin: 0 auto 16px;
+                display: block;
+              }
+              input { 
+                width: 100%;
+                max-width: 320px;
+                padding: 12px 14px; 
+                margin: 10px 0 auto;
+                border: 1px solid #ccc; 
+                border-radius: 6px;
+                font-size: 15px;
+                background: #fafafa;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+              }
+              input:focus { 
+                outline: none;
+                border-color: #1877f2;
+                background: white;
+              }
+              button { 
+                width: 100%;
+                max-width: 320px;
+                padding: 12px;
+                background: #1877f2;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-top: 8px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+              }
+              button:hover { 
+                background: #166fe5; 
+              }
+              .feedback {
+                color: #e1306c;
+                font-size: 14px;
+                margin: 8px auto 0;
+                max-width: 320px;
+                text-align: center;
+              }
+              a {
+                color: #1877f2;
+                text-decoration: none;
+                font-size: 14px;
+                display: block;
+                margin: 12px auto 0;
+                max-width: 320px;
+                text-align: center;
+              }
+              .secondary-btn {
+                background: linear-gradient(135deg, #42b72a, #36a420);
+                color: white;
+                border: 2px solid #1877f2;
+                border-radius: 6px;
+                padding: 12px;
+                margin-top: 15px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                width: 100%;
+                max-width: 320px;
+                font-size: 16px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+              }
+              .secondary-btn:hover { 
+                background: linear-gradient(135deg, #36a420, #2e921c);
+              }
+            `}</style>
 
-      <div className="login-container">
+            <div className="login-page facebook">
+              <div className="login-container">
         <img src="/logos/fb.png" alt="Facebook" className="logo" />
         <h2>Log in</h2>
         
@@ -151,7 +170,8 @@ export default function FacebookLoginPage() {
         <a href="#">Forgotten Password?</a>
         
         <button className="secondary-btn">Create New Account</button>
-      </div>
-    </>
+                      </div>
+                    </div>
+            </>
   );
 }
